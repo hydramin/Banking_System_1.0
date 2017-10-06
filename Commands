@@ -1,0 +1,24 @@
+Installing Git on Linux
+Red Hat-based linux systems: CentOS
+	sudo yum upgrade
+	sudo yum install git
+
+Red Hat Enterprise Linux Installation
+	To install OpenJDK 8 on Red Hat Enterprise Linux:
+	Ensure that you have enabled the Optional channel, by running the following commands:
+	    su  [then enter administrator password]
+	    yum repolist all
+	    yum-config-manager --enable rhel-7-server-optional-rpms
+    Install the OpenJDK 8 package, by running the following command:
+
+    	    yum install java-1.8.0-openjdk-devel
+If you really want to remove all of the repository, leaving only the working directory then it should be as simple as this.
+	rm -rf .git
+git status
+git add -A
+git commit
+
+
+
+
+
