@@ -14,9 +14,16 @@ Red Hat Enterprise Linux Installation
     	    yum install java-1.8.0-openjdk-devel
 If you really want to remove all of the repository, leaving only the working directory then it should be as simple as this.
 	rm -rf .git
-git status
-git add -A
-git commit
+
+Initializing git after cloning a repo
+1.git init
+2.git config user.name "someone"
+3.git config user.email "someone@someplace.com"
+
+git status :: tells the status if I committed, added, ...
+git add -A :: add all files in folder
+git commit -m "message" :: attach added files to local repository
+git push :: push committed files to remote git repository
 
 
 
