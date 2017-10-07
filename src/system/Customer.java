@@ -17,6 +17,13 @@ public class Customer {
 		this.credit = null;
 		this.loan = null;
 	}
+	
+	//////////////////////////////////////////////////////////////
+	// Getters
+	public static TreeMap<Integer, Customer> getCustomerList() {
+		return customerList;
+	}
+	//////////////////////////////////////////////////////////////
 		
 	public static Customer addCustomer(int securityNumber)
 	{
@@ -38,10 +45,5 @@ public class Customer {
 		if (account instanceof Loan);
 	}
 	//////////////////////////////////////////////////////////////
-	public static void main(String[] args) {
-		Chequeing acc1 = new Chequeing();
-		Credit credit = new Credit();
-
-	}
 
 }
