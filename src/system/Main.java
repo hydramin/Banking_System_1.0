@@ -1,10 +1,13 @@
 package system;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Main {
     public static void main(String[] args) {
         // some test cases
 
-        Customer cus1 = Customer.addCustomer(123);
+        /*Customer cus1 = Customer.addCustomer(123);
         Account acc1 = Chequeing.addChequeing(666);
         	Chequeing.setOverdraftOption(acc1, 1);
         	acc1.depositAmount(999.89);
@@ -28,7 +31,16 @@ public class Main {
         for (Integer c : Customer.getCustomerList().keySet()) {
 			System.out.println(Customer.getCustomerList().get(c).toString());
 		}
-        System.out.println(Customer.getCustomerList().size());
+        System.out.println(Customer.getCustomerList().size());*/
+    	
+    	Date date = new Date();
+    	SimpleDateFormat dFormat = new SimpleDateFormat("HH");
+    	String hour = dFormat.format(date);
+    	System.out.println(hour);
+    	
+    	
+    	System.out.println(date.getTime());
+    	System.out.println(System.currentTimeMillis()/ 86400000);
 
     }
 }

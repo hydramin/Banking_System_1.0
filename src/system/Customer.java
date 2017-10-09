@@ -5,7 +5,8 @@ import java.util.HashMap;
 
 public class Customer {
 
-	private int securityNumber;
+	private int securityNumber; // social security number of the customer, serves as the name of the customer
+	private double totalIndebtedness; // the total amount overdrawn at any point in time in all accounts
 	private Account cheque;
 	private Account credit;
 	private Account loan;
@@ -22,6 +23,7 @@ public class Customer {
 		this.cheque = null;
 		this.credit = null;
 		this.loan = null;
+		this.totalIndebtedness = 0;
 	}
 
 

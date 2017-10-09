@@ -3,39 +3,57 @@ package system;
 public class Account implements accountOperations{
 	private double balance; // the current amount in the account
     private int accountNumber; // identification for an account
-    private  double withdrawAmount;
-    private double depositAmount;
+    private boolean isAccountActive = true; // account active = true, account suspended = false
+    private double indebtedness; // the amount overdrawn for the particular account
     
     //////////////////////////////////////////// Constructor
     public Account() {
 		this.balance = 0;
-		this.accountNumber = 0;
-		this.withdrawAmount = 0;
-		this.depositAmount = 0;		
+		this.accountNumber = 0;		
+		this.indebtedness = 0;
 	}
     
-	//////////////////////////////////////////////
-	// Getters
-	@Override
-	public void withdrawAmount(double amount) {
-		this.balance -= amount;
-		
-		if (this.balance < 0); // trigger the overdraft or NFS fee blah blah ...
-	}
-	@Override
-	public void depositAmount(double amount) {
-		this.balance += amount;
-	}
+	//////////////////////////////////////////////// Getters
+	/**
+	 * @return : returns the value of the current balance.
+	 */
 	@Override
 	public double getBalance() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	//////////////////////////////////////////////
-	//Operations
+	
 	@Override
-	public void suspendAccount() {  // user can only see the balance and account activity, 
-									// all other activities (withdrawing, depositing) are prohibited
+	public double getIndebtedness() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	////////////////////////////////////////////////Operations
+	/**
+	 * @Description : takes in a certain amount and depending on the overdraft option reduces the balance
+	 * @param : amount to be withdrawn
+	 */
+	@Override
+	public void withdrawAmount(double amount) {
+		this.balance -= amount;
+		
+//		if (this.balance < 0); // trigger the overdraft or NFS fee blah blah ...
+	}
+	
+	/**
+	 * @Description : takes in a certain amount and increases the balance by the amount
+	 * @param : amount to be deposited
+	 * 
+	 */
+	@Override
+	public void depositAmount(double amount) {
+		this.balance += amount;
+	}
+	/**
+	 * @Description : user can only see the balance and account activity; all other activities (withdrawing, depositing) are prohibited
+	 */
+	@Override
+	public void suspendAccount() {  // isAccountActive = false
 		// TODO Auto-generated method stub
 		
 	}
