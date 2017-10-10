@@ -58,14 +58,19 @@ public class Account implements accountOperations {
 	public void reactivateAccount() { // all functionality is restored to the account
 		// TODO Auto-generated method stub
 		
-	}	
+	}
 
+	@Override
+	public int setLimit(int limit) {
+		return 0;
+	}
 
 	@Override
 	public double transferAmount(double amount, Account account) {  // transfers $xXx amount to another account
 		// TODO Auto-generated method stub
 		return 0;
 	}
+
 	/////////////////////////////////////////////
 	@Override
 	public String toString() {
