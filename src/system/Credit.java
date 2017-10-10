@@ -5,7 +5,6 @@ import java.util.HashMap;
 public class Credit extends Account
 {
 	private double balance;
-	private int creditLimit;
 	private int CLEPenalty;
 	private static HashMap<Integer, Credit> creditAccList = new HashMap<>();
 
@@ -22,26 +21,26 @@ public class Credit extends Account
 		return creditAccList.get(accountNumber);
 	}
 
-	public double withdraw(double withdrawalAmt) throws NegativeBalanceException
-	{
-		if (highCreditLimitCLE(withdrawalAmt))
-		{
-			chargeCLEPenalty();
-			declineWithdrawal();
-		}
-		else if (lowCreditLimitCLE(withdrawalAmt))
-			declineWithdrawal();
-		return balance -= withdrawalAmt;
-	}
+    @Override
+    public void withdrawAmount(double amount) throws NegativeBalanceException
+    {
+        if (highCreditLimitCLE(amount))
+        {
+            chargeCLEPenalty();
+            declineWithdrawal();
+        }
+        else if (lowCreditLimitCLE(amount))
+            declineWithdrawal();
+    }
 
-	public boolean highCreditLimitCLE(double withdrawalAmt)
+    public boolean highCreditLimitCLE(double withdrawalAmt)
 	{
-		return ((creditLimit > 1000) && ((balance - withdrawalAmt) + creditLimit) < 0);
+		return ((super.getLimit() > 1000) && ((balance - withdrawalAmt) + super.getLimit()) < 0);
 	}
 
 	public boolean lowCreditLimitCLE(double withdrawalAmt)
 	{
-		return ((creditLimit <= 1000) && ((balance - withdrawalAmt) + creditLimit) < 0);
+		return ((super.getLimit() <= 1000) && ((balance - withdrawalAmt) + super.getLimit()) < 0);
 	}
 
     private void chargeCLEPenalty()
