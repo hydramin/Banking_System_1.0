@@ -30,20 +30,26 @@ public class Chequeing extends Account implements Runnable {
 		takeDailyFee = false;
 		overdraftLimit = 0;
 		chosenOverdraftOption = OVER_DRAFT_OPTION_1; // Default overdraft option is Option 1.
+		System.out.println("Chequeing acc created.");
+		System.out.println(this);
 	}
 	////////////////////////////////////////////////////////////////////////////////////////// Operations
 	public static Chequeing addChequeing(int accountNumber) // only one account number can be assigned to one customer
 	{
-		int key = accountNumber;
-		Chequeing c = chequeingAccList.get(key);
-		if (c == null)
+//		Chequeing c = chequeingAccList.get(accountNumber);
+//		if (c == null)
+//		{
+//			Chequeing.chequeingAccList.put(accountNumber, new Chequeing(accountNumber));
+//		} else {
+//			throw new IllegalArgumentException("\n this chequing account already taken");
+//		}
+//		return c;
+		
+		if (!chequeingAccList.containsKey(accountNumber))
 		{
-			c = new Chequeing(accountNumber);
-			Chequeing.chequeingAccList.put(key, c);
-		} else {
-			throw new IllegalArgumentException("\n this chequing account already taken");
+			chequeingAccList.put(accountNumber, new Chequeing(accountNumber));
 		}
-		return c;
+		return chequeingAccList.get(accountNumber);
 	}
 	
 	public void setOverdraftOption(int option) // chequeing
