@@ -10,7 +10,7 @@ public class Chequeing extends Account implements Runnable {
 	
 	// The account gets created and it will be modified
 
-	private double overdraftLimit; // set a the overdraft limit
+//	private double overdraftLimit; // set a the overdraft limit
 	private int chosenOverdraftOption;
 	private double withdrawLimit;
 	public static final int OVER_DRAFT_OPTION_1 = 1; // No Overdraft Protection: with this option, if a withdrawal from the
@@ -28,7 +28,7 @@ public class Chequeing extends Account implements Runnable {
 	private Chequeing(int accountNumber) {
 		super(accountNumber);
 		takeDailyFee = false;
-		overdraftLimit = 0;
+//		overdraftLimit = 0;
 		chosenOverdraftOption = OVER_DRAFT_OPTION_1; // Default overdraft option is Option 1.
 		System.out.println("Chequeing acc created.");
 		System.out.println(this);
@@ -60,10 +60,14 @@ public class Chequeing extends Account implements Runnable {
 		this.chosenOverdraftOption = option;
 	}
 	
-	public void setOverdraftLimit(int overdraftLimit) {		
-		this.overdraftLimit = overdraftLimit;
-		this.withdrawLimit = - overdraftLimit;
+	@Override
+	public void setLimit(int limit) {
+//		this.overdraftLimit = overdraftLimit;
+		super.setLimit(limit);
+		this.withdrawLimit = - super.getLimit();
+//		super.setLimit(limit);
 	}
+
 	
 	@Override
 	public void withdrawAmount(double amount) {
@@ -140,7 +144,7 @@ public class Chequeing extends Account implements Runnable {
 	@Override
 	public String toString() {
 		return super.toString() + "Option: " + this.chosenOverdraftOption +"\n"+ 
-									"overdraft Limit: "+ overdraftLimit +"\n" +
+									"overdraft Limit: "+ super.getLimit() +"\n" +
 									"withdraw Limit: "+ withdrawLimit+"\n";
 	}
 

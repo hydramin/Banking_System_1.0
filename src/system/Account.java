@@ -5,6 +5,7 @@ public class Account implements accountOperations {
     private int accountNumber; // identification for an account
     private boolean isAccountActive = true; // account active = true, account suspended = false
     private double indebtedness; // the amount overdrawn for the particular account
+    private int limit;
     
     //////////////////////////////////////////// Constructor
     protected Account(int accountNumber) {
@@ -26,6 +27,10 @@ public class Account implements accountOperations {
 	public double getIndebtedness() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	public int getLimit() {
+		return limit;
 	}
 	////////////////////////////////////////////////Operations
 	/**
@@ -61,8 +66,8 @@ public class Account implements accountOperations {
 	}
 
 	@Override
-	public int setLimit(int limit) {
-		return 0;
+	public void setLimit(int limit) {
+		this.limit = limit;
 	}
 
 	@Override
@@ -78,6 +83,8 @@ public class Account implements accountOperations {
 				"Bal: "+balance +"\n" +
 				"Indebt: " + indebtedness +"\n";
 	}
+
+	
 
 	
 

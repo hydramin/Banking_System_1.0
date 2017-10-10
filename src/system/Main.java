@@ -136,13 +136,13 @@ public class Main {
 								+ "checking account would cause the balance to be less than 0, then the withdrawal will \n"
 								+ "be declined, and a Non-Sufficient Funds (NSF) penalty will be charged.\n");
 				System.out.println("2. Pay Per Use Overdraft Protection. 5$ for creating overdraft or increasing overdraft balance.\n");
-				System.out.println("Monthly Fixed Fee Overdraft Protection. 4$ a month fixed\n");				
+				System.out.println("3. Monthly Fixed Fee Overdraft Protection. 4$ a month fixed\n");				
 				
 				chequeing.setOverdraftOption(choice.nextInt());
 				break;
 			case 2:
 				System.out.println("Enter whole number from 100 to 5000");
-				chequeing.setOverdraftLimit(choice.nextInt());
+				chequeing.setLimit(choice.nextInt());
 				break;
 
 			default:
