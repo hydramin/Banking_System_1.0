@@ -28,28 +28,20 @@ public class Chequeing extends Account implements Runnable {
 	private Chequeing(int accountNumber) {
 		super(accountNumber);
 		takeDailyFee = false;
-//		overdraftLimit = 0;
 		chosenOverdraftOption = OVER_DRAFT_OPTION_1; // Default overdraft option is Option 1.
-		System.out.println("Chequeing acc created.");
-		System.out.println(this);
+		System.out.println("Chequeing acc created.");		
 	}
 	////////////////////////////////////////////////////////////////////////////////////////// Operations
 	public static Chequeing addChequeing(int accountNumber) // only one account number can be assigned to one customer
 	{
-//		Chequeing c = chequeingAccList.get(accountNumber);
-//		if (c == null)
-//		{
-//			Chequeing.chequeingAccList.put(accountNumber, new Chequeing(accountNumber));
-//		} else {
-//			throw new IllegalArgumentException("\n this chequing account already taken");
-//		}
-//		return c;
+
 		
 		if (!chequeingAccList.containsKey(accountNumber))
 		{
 			chequeingAccList.put(accountNumber, new Chequeing(accountNumber));
+			return chequeingAccList.get(accountNumber);
 		}
-		return chequeingAccList.get(accountNumber);
+		return null;
 	}
 	
 	public void setOverdraftOption(int option) // chequeing
@@ -62,10 +54,8 @@ public class Chequeing extends Account implements Runnable {
 	
 	@Override
 	public void setLimit(int limit) {
-//		this.overdraftLimit = overdraftLimit;
 		super.setLimit(limit);
 		this.withdrawLimit = - super.getLimit();
-//		super.setLimit(limit);
 	}
 
 	
@@ -95,6 +85,7 @@ public class Chequeing extends Account implements Runnable {
 					takeDailyFee = true;
 					super.withdrawAmount(amount + DAILY_OVERDRAFT_FEE); // everytime overdraft is created fee is charged
 					
+					System.out.println("Scheduled runner triggered.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 					ScheduledExecutorService pay = Executors.newSingleThreadScheduledExecutor();
 					pay.scheduleAtFixedRate(this, 0, 5, TimeUnit.SECONDS);
 					break;
@@ -114,7 +105,7 @@ public class Chequeing extends Account implements Runnable {
 	
 	@Override
 	public void run(){
-		System.out.println("I am scheduled runner");
+//		System.out.println("I am scheduled runner");
 		
 		try {
 			endDayOptionTwoCharge();
@@ -136,23 +127,23 @@ public class Chequeing extends Account implements Runnable {
 		// if balance is -ve and time is 5pm (17:00)
 		SimpleDateFormat hour = new SimpleDateFormat("HH:mm");
 		String endOfDayHour = hour.format(System.currentTimeMillis());
-		System.out.println("\n"+"    balance: "+ super.getBalance() + "\n"+"    hour: "+ endOfDayHour);
+//		System.out.println("\n"+"    balance: "+ super.getBalance() + "\n"+"    hour: "+ endOfDayHour);
 
-		if (super.getBalance() < 0 && endOfDayHour.equals("23:29") && takeDailyFee) {
-			System.out.println("\n"+"if works");
+		if (super.getBalance() < 0 && endOfDayHour.equals("17:56") && takeDailyFee) {
+//			System.out.println("\n"+"if works");
 			super.withdrawAmount(DAILY_OVERDRAFT_FEE);
 			takeDailyFee = false;
 		}
 		
-		System.out.println(this.getBalance());
+//		System.out.println(this.getBalance());
 	}
 	
 	
 	@Override
 	public String toString() {
 		return super.toString() + "Option: " + this.chosenOverdraftOption +"\n"+ 
-									"overdraft Limit: "+ super.getLimit() +"\n" +
-									"withdraw Limit: "+ withdrawLimit+"\n";
+								  "overdraft Limit: "+ super.getLimit() +"\n" +
+								  "withdraw Limit: "+ withdrawLimit+"\n";
 	}
 
 }

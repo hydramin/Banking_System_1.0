@@ -134,8 +134,11 @@ public class Customer /*implements customerOperations*/ //
 	
 	@Override
 	public String toString() {
-//        return String.format ("%d %s, %s, %s \n",securityNumber, chequeing, credit, loan);		// we should try using String format
-			return (securityNumber +" "+ chequeing +" " + credit + " " + loan);
+        return String.format ("SIN number:>>>>> %d \n\n"
+        		+ "Chequeing Account:>>>>> \n%s\n"
+        		+ "Credit Account:>>>>> \n%s\n"
+        		+ "Loan Account:>>>>>\n%s",securityNumber, this.chequeing, this.credit, this.loan);		// we should try using String format
+//			return (securityNumber +" "+ chequeing +" " + credit + " " + loan);
 	}
 
 

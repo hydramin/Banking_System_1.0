@@ -94,8 +94,8 @@ public class Account implements accountOperations
 	public String toString()
 	{
 		return "Acc #: "+accountNumber +"\n" +
-				"Bal: "+balance +"\n" +
-				"Indebt: " + indebtedness +"\n";
+			   "Bal: "+balance +"\n" +
+			   "Indebt: " + indebtedness +"\n";
 	}
 
 }
