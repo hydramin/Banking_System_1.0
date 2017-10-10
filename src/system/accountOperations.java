@@ -9,6 +9,7 @@ public interface accountOperations {
 	public void reactivateAccount(); // all
 	public double getBalance();	 // all
 	public double getIndebtedness(); // all
+	public int setLimit(int limit); // credit and checking
 	public double transferAmount(double amount, Account account); // all
 	
 }
