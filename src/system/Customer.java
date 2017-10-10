@@ -2,14 +2,25 @@ package system;
 
 import java.util.HashMap;
 
-public class Customer
+public class Customer /*implements customerOperations*/ // 
+/**
+ * Note: addAccount will be single method, stores as account
+ * 		 getChequeing and the likes, cast the Account to the appropriate account before returning
+ */
+
 {
 
-	private final int securityNumber;
-	private Account cheque;
-	private Account credit;
-	private Account loan;
-	private static HashMap<Integer, Customer> customerList = new HashMap<>();
+	private final int securityNumber; // social security number of the customer, serves as the name of the customer
+	private double totalIndebtedness; // the total amount overdrawn at any point in time in all accounts
+	private Chequeing chequeing;
+	private Credit credit;
+	private Loan loan;
+//	private Account chequeing;
+//	private Account credit;
+//	private Account loan;
+	private static HashMap<Integer, Customer> customerList= new HashMap<>();
+	
+	
 
     /**
      * @Description: The constructor is only called by the addCustomer(..) method and it
@@ -20,9 +31,11 @@ public class Customer
 	private Customer(int securityNumber) 
 	{
 		this.securityNumber = securityNumber;
-		this.cheque = null;
+		this.chequeing = null;
 		this.credit = null;
 		this.loan = null;
+		this.totalIndebtedness = 0;
+		System.out.println("Customer Created!");
 	}
 
 
@@ -33,6 +46,18 @@ public class Customer
 	{
         return customerList;
     }
+    
+	public Chequeing getChequeing() {
+		return (Chequeing) chequeing;
+	}
+	
+	public Credit getCredit() {
+		return (Credit) credit;
+	}
+	
+	public Loan getLoan() {
+		return (Loan) loan;
+	}
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -54,49 +79,47 @@ public class Customer
 	{
 		/**
 		 * Why don't we try it like this?
+		 * Ans, Amin: Good Idea
 		 *
 		 */
-
+		
 		if (!customerList.containsKey(securityNumber))
 		{
-			return customerList.put(securityNumber, new Customer(securityNumber));
-
+			customerList.put(securityNumber, new Customer(securityNumber));
 		}
 		return customerList.get(securityNumber);
 	}
-
-    /**
-	 *
-     * @Description: The 3 types of accounts are instantiated by means of polymorphism and passed
-     *              in as arguments, if the account is null it will be assigned to the parameter.
-	 *
-     * @param account: it is either a Chequeing, Credit or Loan type
-	 * @pre
-	 * @post
-     * @throws throws IllegalArgument Exception if parameter is null
-	 *
-     */
-
-	public void addAccount(Account account)
-	{
-
-
-		// Just made some visual, preference changes lol, nothing major.
-
-		if(!account.equals(null))
-	    {
-            if (account instanceof Chequeing && this.cheque.equals(null))
-                this.cheque = account;
-            if (account instanceof Credit && this.credit.equals(null))
-                this.credit = account;
-            if (account instanceof Loan && this.loan.equals(null))
-                this.loan = account;
-        }
-        else
-		{
-	        throw new IllegalArgumentException();
-        }
+	
+	public void addAccount(Chequeing account){
+		this.chequeing = account;
 	}
+	
+	public void addAccount(Credit account){
+		this.credit = account;
+	}
+	
+	public void addAccount(Loan account){
+		this.loan = account;
+	}
+
+	/*public void addAccount(Account account) {
+		System.out.println("is null?" + account);
+		if (!account.equals(null)) {
+			
+			if (account instanceof Chequeing && this.chequeing == null) // Can't use .equals for comparing a class to null
+				this.chequeing = account;
+			if (account instanceof Credit && this.chequeing == null)
+				this.credit = account;
+			if (account instanceof Loan && this.chequeing == null)
+				this.loan = account;
+		} else {
+			throw new IllegalArgumentException();
+		}
+		System.out.println("Account added \n" + this);
+	}*/
+	
+	
+	
 
 	//////////////////////////////////////////////////////////////
 
@@ -108,9 +131,15 @@ public class Customer
 	 *
      */
 
-    @Override
-    public String toString()
-	{
-        return String.format ("%s, %s, %s", cheque, credit, loan);		// we should try using String format
-    }
+	
+	@Override
+	public String toString() {
+//        return String.format ("%d %s, %s, %s \n",securityNumber, chequeing, credit, loan);		// we should try using String format
+			return (securityNumber +" "+ chequeing +" " + credit + " " + loan);
+	}
+
+
+	
 }
+
+
