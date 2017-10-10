@@ -1,14 +1,17 @@
 package system;
 
-public class Account implements accountOperations {
+public class Account implements accountOperations
+{
 	private double balance; // the current amount in the account
     private int accountNumber; // identification for an account
     private boolean isAccountActive = true; // account active = true, account suspended = false
     private double indebtedness; // the amount overdrawn for the particular account
     private int limit;
+
     
     //////////////////////////////////////////// Constructor
-    protected Account(int accountNumber) {
+    protected Account(int accountNumber)
+	{
 		this.balance = 0;
 		this.accountNumber = accountNumber;		
 		this.indebtedness = 0;
@@ -19,18 +22,21 @@ public class Account implements accountOperations {
 	 * @return : returns the value of the current balance.
 	 */
 	@Override
-	public double getBalance() {
+	public double getBalance()
+	{
 		return this.balance;
 	}
 	
 	@Override
-	public double getIndebtedness() {
+	public double getIndebtedness()
+	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
-	public int getLimit() {
-		return limit;
+
+	public int getLimit()
+	{
+		return this.limit;
 	}
 	////////////////////////////////////////////////Operations
 	/**
@@ -38,7 +44,8 @@ public class Account implements accountOperations {
 	 * @param : amount to be withdrawn
 	 */
 	@Override
-	public void withdrawAmount(double amount) {
+	public void withdrawAmount(double amount) throws NegativeBalanceException
+	{
 		this.balance -= amount;
 	}
 	
@@ -48,44 +55,47 @@ public class Account implements accountOperations {
 	 * 
 	 */
 	@Override
-	public void depositAmount(double amount) {
+	public void depositAmount(double amount)
+	{
 		this.balance += amount;
 	}
 	/**
 	 * @Description : user can only see the balance and account activity; all other activities (withdrawing, depositing) are prohibited
 	 */
 	@Override
-	public void suspendAccount() {  // isAccountActive = false
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void reactivateAccount() { // all functionality is restored to the account
+	public void suspendAccount()
+	{  // isAccountActive = false
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void setLimit(int limit) {
+	public void reactivateAccount()
+	{ // all functionality is restored to the account
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void setLimit(int limit)
+	{
 		this.limit = limit;
 	}
 
 	@Override
-	public double transferAmount(double amount, Account account) {  // transfers $xXx amount to another account
+	public double transferAmount(double amount, Account account)
+	{  // transfers $xXx amount to another account
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	/////////////////////////////////////////////
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return "Acc #: "+accountNumber +"\n" +
 				"Bal: "+balance +"\n" +
 				"Indebt: " + indebtedness +"\n";
 	}
-
-	
-
-	
 
 }

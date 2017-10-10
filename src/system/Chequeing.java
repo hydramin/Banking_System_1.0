@@ -70,7 +70,7 @@ public class Chequeing extends Account implements Runnable {
 
 	
 	@Override
-	public void withdrawAmount(double amount) {
+	public void withdrawAmount(double amount) throws NegativeBalanceException {
 		// TODO Auto-generated method stub
 //		System.out.println("withdraw called here");
 		
@@ -113,9 +113,16 @@ public class Chequeing extends Account implements Runnable {
 	}
 	
 	@Override
-	public void run() {
+	public void run(){
 		System.out.println("I am scheduled runner");
-		endDayOptionTwoCharge();
+		
+		try {
+			endDayOptionTwoCharge();
+		} catch (NegativeBalanceException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		if (takeDailyFee == false)
 			try {
 				Thread.sleep(10000);
@@ -125,7 +132,7 @@ public class Chequeing extends Account implements Runnable {
 			}		
 	}
 	
-	private void endDayOptionTwoCharge(){ //////////////////////////////I couldn't do a balance and time listener simultaneously using Runnable
+	private void endDayOptionTwoCharge() throws NegativeBalanceException{ 
 		// if balance is -ve and time is 5pm (17:00)
 		SimpleDateFormat hour = new SimpleDateFormat("HH:mm");
 		String endOfDayHour = hour.format(System.currentTimeMillis());
