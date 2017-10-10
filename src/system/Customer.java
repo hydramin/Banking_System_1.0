@@ -7,9 +7,9 @@ public class Customer {
 
 	private int securityNumber; // social security number of the customer, serves as the name of the customer
 	private double totalIndebtedness; // the total amount overdrawn at any point in time in all accounts
-	private Account cheque;
-	private Account credit;
-	private Account loan;
+	private Chequeing chequeing;
+	private Credit credit;
+	private Loan loan;
 	private static HashMap<Integer, Customer> customerList= new HashMap<>();
 
     /**
@@ -20,7 +20,7 @@ public class Customer {
 	private Customer(int securityNumber) 
 	{
 		this.securityNumber = securityNumber;
-		this.cheque = null;
+		this.chequeing = null;
 		this.credit = null;
 		this.loan = null;
 		this.totalIndebtedness = 0;
@@ -33,6 +33,11 @@ public class Customer {
     public static HashMap<Integer, Customer> getCustomerList() {
         return customerList;
     }
+    
+   public Chequeing getChequeing() {
+	return chequeing;
+}
+    
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -62,20 +67,36 @@ public class Customer {
      * @param account: it is either a Chequeing, Credit or Loan type
      * @throws throws IllegalArgument Exception if parameter is null
      */
-	public void addAccount(Account account)
+//	public void addAccount(Account account)
+//	{
+//	    if(account != null)
+//	    {
+//            if (account instanceof Chequeing && this.cheque == null)
+//                this.cheque = account;
+//            if (account instanceof Credit && this.credit == null)
+//                this.credit = account;
+//            if (account instanceof Loan && this.loan == null)
+//                this.loan = account;
+//        }else {
+//	        throw new IllegalArgumentException();
+//        }
+//	}
+	
+	public void addAccount(Chequeing account)
 	{
 	    if(account != null)
 	    {
-            if (account instanceof Chequeing && this.cheque == null)
-                this.cheque = account;
-            if (account instanceof Credit && this.credit == null)
-                this.credit = account;
-            if (account instanceof Loan && this.loan == null)
-                this.loan = account;
+            if (this.chequeing == null)
+                this.chequeing = account;
+            else
+            	System.out.println("Account alredy present");
+            
         }else {
 	        throw new IllegalArgumentException();
         }
 	}
+	
+	
 
 	//////////////////////////////////////////////////////////////
 
@@ -85,7 +106,7 @@ public class Customer {
      */
     @Override
     public String toString() {
-        return (cheque +" " + credit + " " + loan);
+        return (chequeing +" " + credit + " " + loan + "\n");
     }
 
 

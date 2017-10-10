@@ -7,9 +7,9 @@ public class Account implements accountOperations{
     private double indebtedness; // the amount overdrawn for the particular account
     
     //////////////////////////////////////////// Constructor
-    public Account() {
+    protected Account(int accountNumber) {
 		this.balance = 0;
-		this.accountNumber = 0;		
+		this.accountNumber = accountNumber;		
 		this.indebtedness = 0;
 	}
     
@@ -19,8 +19,7 @@ public class Account implements accountOperations{
 	 */
 	@Override
 	public double getBalance() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.balance;
 	}
 	
 	@Override
@@ -36,8 +35,6 @@ public class Account implements accountOperations{
 	@Override
 	public void withdrawAmount(double amount) {
 		this.balance -= amount;
-		
-//		if (this.balance < 0); // trigger the overdraft or NFS fee blah blah ...
 	}
 	
 	/**
@@ -72,7 +69,9 @@ public class Account implements accountOperations{
 	/////////////////////////////////////////////
 	@Override
 	public String toString() {
-		return "Acc #: "+accountNumber + " Bal: "+balance;
+		return "Acc #: "+accountNumber +"\n" +
+				"Bal: "+balance +"\n" +
+				"Indebt: " + indebtedness +"\n";
 	}
 
 	
