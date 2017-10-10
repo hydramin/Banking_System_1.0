@@ -13,11 +13,11 @@ public class Chequeing extends Account implements Runnable {
 	private double overdraftLimit; // set a the overdraft limit
 	private int chosenOverdraftOption;
 	private double withdrawLimit;
-	private static final int OVER_DRAFT_OPTION_1 = 1; // No Overdraft Protection: with this option, if a withdrawal from the
+	public static final int OVER_DRAFT_OPTION_1 = 1; // No Overdraft Protection: with this option, if a withdrawal from the
 					       							//	checking account would cause the balance to be less than 0, then the withdrawal will
 					       							//	be declined, and a Non-Sufficient Funds (NSF) penalty will be charged.
-	private static final int OVER_DRAFT_OPTION_2 = 2; // Pay Per Use Overdraft Protection.
-	private static final int OVER_DRAFT_OPTION_3 = 3; // Monthly Fixed Fee Overdraft Protection.
+	public static final int OVER_DRAFT_OPTION_2 = 2; // Pay Per Use Overdraft Protection.
+	public static final int OVER_DRAFT_OPTION_3 = 3; // Monthly Fixed Fee Overdraft Protection.
 	private static final double NONSUFFICIENT_FUNDS_FEE = 25; // 25 dollars fee
 	private static final double DAILY_OVERDRAFT_FEE = 5; // 25 dollars fee
 	private static boolean takeDailyFee;
@@ -90,6 +90,7 @@ public class Chequeing extends Account implements Runnable {
 					// thread triggerd once per day
 					takeDailyFee = true;
 					super.withdrawAmount(amount + DAILY_OVERDRAFT_FEE); // everytime overdraft is created fee is charged
+					
 					ScheduledExecutorService pay = Executors.newSingleThreadScheduledExecutor();
 					pay.scheduleAtFixedRate(this, 0, 5, TimeUnit.SECONDS);
 					break;
@@ -117,8 +118,7 @@ public class Chequeing extends Account implements Runnable {
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-		
+			}		
 	}
 	
 	private void endDayOptionTwoCharge(){ //////////////////////////////I couldn't do a balance and time listener simultaneously using Runnable
