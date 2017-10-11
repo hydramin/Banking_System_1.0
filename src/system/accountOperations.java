@@ -3,7 +3,7 @@ package system;
 
 public interface accountOperations
 {
-	public void withdrawAmount(double amount) throws  NegativeBalanceException; // all
+	public void withdrawAmount(double amount) throws  NegativeBalanceException, AccountSuspendedException; // all
 	public void depositAmount(double amount); // all
 	public void suspendAccount(); // all
 	public void reactivateAccount(); // all

@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 public class Credit extends Account
 {
-//	private double balance; // balance is already in Account, you can add/subtract from it by withdraw and deposit methods. super.deposit/ super.withdraw
 	private static final int CLEPenalty = 25;
 	private static HashMap<Integer, Credit> creditAccList = new HashMap<>();
 	private static boolean CLEpenaltyStatus;
@@ -34,19 +33,10 @@ public class Credit extends Account
 			declineWithdrawal();
 	}
 
-	/*public boolean applyCreditLimitCLE(double withdrawalAmt) { // changed from highCreditLimitCLE to applyCreditLimitCLE so it makes more sense
-		return ((super.getLimit() > 1000) && ((super.getBalance() - withdrawalAmt) + super.getLimit()) < 0); // No need to add the limit, Eg: balance = 1000, Limit = 1000 (nothing is withdrawn)
-																	  //withdraw = 1010$ ; (balance - withdraw) = -10 < 0 (no need to add the super.getLimit())
-	}*/
-	
-	private boolean applyCreditLimitCLE(double withdrawalAmt) { // changed from highCreditLimitCLE to applyCreditLimitCLE so it makes more sense
-		return (CLEpenaltyStatus && ((super.getBalance() - withdrawalAmt)) < 0); // No need to add the limit, Eg: balance = 1000, Limit = 1000 (nothing is withdrawn)
-																	  			//withdraw = 1010$ ; (balance - withdraw) = -10 < 0 (no need to add the super.getLimit())
-	}
+	private boolean applyCreditLimitCLE(double withdrawalAmt) {
+		return (CLEpenaltyStatus && ((super.getBalance() - withdrawalAmt)) < 0);
 
-//	public boolean lowCreditLimitCLE(double withdrawalAmt) { //////////////////////////////////////////// this method is duplicate, the above sufficies
-//		return ((super.getLimit() <= 1000) && ((super.getBalance() - withdrawalAmt)/* + super.getLimit()*/) < 0);
-//	}
+	}
 
 	private void chargeCLEPenalty() throws NegativeBalanceException {
 		super.withdrawAmount(Credit.CLEPenalty);
@@ -61,19 +51,16 @@ public class Credit extends Account
 		super.setLimit(limit);
 		super.depositAmount(limit);
 		CLEpenaltyStatus = (limit > 1000) ? true : false;
-//		System.out.println("Credit Limit Changed");
 	}
 	
 	@Override
-		public void depositAmount(double amount) { // Can not deposite into a credit account, transfer function is better
-			throw new UnsupportedOperationException();
-		}
+	public void depositAmount(double amount) { // Can not deposite into a credit account, transfer function is better
+		throw new UnsupportedOperationException();
+	}
 
 	@Override
 	public String toString() {
 		String CLEstatusDisplay = (CLEpenaltyStatus)?"High Credit Limit & CLE penalty": "Low Credit Limit & No CLE penalty";
 		return super.toString() + "CLE Penalty: "+CLEstatusDisplay +"\n";
 	}
-	
-	
 }

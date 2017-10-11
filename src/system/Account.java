@@ -44,9 +44,19 @@ public class Account implements accountOperations
 	 * @param : amount to be withdrawn
 	 */
 	@Override
-	public void withdrawAmount(double amount) throws NegativeBalanceException
+	public void withdrawAmount(double amount) throws NegativeBalanceException, AccountSuspendedException
 	{
-		this.balance -= amount;
+        /**
+         * Make transaction only if account is still active.
+         * Is the purpose of NegativeBalanceException just for us to know what happened?
+         * cant we just record the negative balance and that be it ?
+         */
+	    if (isAccountActive) {
+            this.balance -= amount;
+            if (this.balance < 0)
+                throw new NegativeBalanceException("Your Balance is now " + this.balance);
+        }
+	    else throw new AccountSuspendedException("This account has been suspended and withdrawal cannot be made");
 	}
 	
 	/**
@@ -64,7 +74,9 @@ public class Account implements accountOperations
 	 */
 	@Override
 	public void suspendAccount()
-	{  // isAccountActive = false
+	{
+		isAccountActive = false;
+		cancellSevices();
 		// TODO Auto-generated method stub
 		
 	}
