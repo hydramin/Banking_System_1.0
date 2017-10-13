@@ -2,12 +2,14 @@ package system;
 
 import java.util.HashMap;
 
+import org.omg.DynamicAny.DynValueBoxOperations;
+
 public class Credit extends Account
 {
 //	private double balance; // balance is already in Account, you can add/subtract from it by withdraw and deposit methods. super.deposit/ super.withdraw
 	private static final int CLEPenalty = 25;
 	private static HashMap<Integer, Credit> creditAccList = new HashMap<>();
-	private static boolean CLEpenaltyStatus;
+	private boolean CLEpenaltyStatus;
 
 	/////////////////////////////////////////////////////////////////////////////// Constructor
 	private Credit(int accountNumber) {
@@ -24,36 +26,44 @@ public class Credit extends Account
 		}
 		return null;
 	}
+	
+	
 
 	@Override
-	public void withdrawAmount(double amount) throws NegativeBalanceException { 
-		if (applyCreditLimitCLE(amount)) {
-			chargeCLEPenalty();
-			declineWithdrawal();
-		} else
-			declineWithdrawal();
+	public void withdrawAmount(double amount)/* throws NegativeBalanceException*/ { 
+//		super.withdrawAmount(amount);
+		double tempBalance = super.getBalance() - amount;
+		super.setTransferStatus(true);
+		if (tempBalance < 0) {
+			super.setTransferStatus(false);
+			if (this.CLEpenaltyStatus) {
+				chargeCLEPenalty();
+				declineWithdrawal();
+			} else
+				declineWithdrawal();
+		} else{
+			super.withdrawAmount(amount);			
+		}
 	}
 
 	/*public boolean applyCreditLimitCLE(double withdrawalAmt) { // changed from highCreditLimitCLE to applyCreditLimitCLE so it makes more sense
 		return ((super.getLimit() > 1000) && ((super.getBalance() - withdrawalAmt) + super.getLimit()) < 0); // No need to add the limit, Eg: balance = 1000, Limit = 1000 (nothing is withdrawn)
 																	  //withdraw = 1010$ ; (balance - withdraw) = -10 < 0 (no need to add the super.getLimit())
 	}*/
-	
-	private boolean applyCreditLimitCLE(double withdrawalAmt) { // changed from highCreditLimitCLE to applyCreditLimitCLE so it makes more sense
-		return (CLEpenaltyStatus && ((super.getBalance() - withdrawalAmt)) < 0); // No need to add the limit, Eg: balance = 1000, Limit = 1000 (nothing is withdrawn)
-																	  			//withdraw = 1010$ ; (balance - withdraw) = -10 < 0 (no need to add the super.getLimit())
-	}
+		
 
 //	public boolean lowCreditLimitCLE(double withdrawalAmt) { //////////////////////////////////////////// this method is duplicate, the above sufficies
 //		return ((super.getLimit() <= 1000) && ((super.getBalance() - withdrawalAmt)/* + super.getLimit()*/) < 0);
 //	}
 
-	private void chargeCLEPenalty() throws NegativeBalanceException {
+	private void chargeCLEPenalty()/* throws NegativeBalanceException*/ {
 		super.withdrawAmount(Credit.CLEPenalty);
 	}
 
-	private void declineWithdrawal() throws NegativeBalanceException {
-		throw new NegativeBalanceException("Balance is negative");
+	private void declineWithdrawal() /*throws NegativeBalanceException*/ {
+//		throw new NegativeBalanceException("Balance is negative");
+		System.out.println("Withdrawal Declined!");
+		super.setTransferStatus(false);
 	}
 	
 	@Override
@@ -66,7 +76,7 @@ public class Credit extends Account
 	
 	@Override
 		public void depositAmount(double amount) { // Can not deposite into a credit account, transfer function is better
-			throw new UnsupportedOperationException();
+			super.depositAmount(amount);
 		}
 
 	@Override

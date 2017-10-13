@@ -7,6 +7,7 @@ public class Account implements accountOperations
     private boolean isAccountActive = true; // account active = true, account suspended = false
     private double indebtedness; // the amount overdrawn for the particular account
     private int limit;
+    private boolean transferStatus;
 
     
     //////////////////////////////////////////// Constructor
@@ -15,6 +16,7 @@ public class Account implements accountOperations
 		this.balance = 0;
 		this.accountNumber = accountNumber;		
 		this.indebtedness = 0;
+		this.transferStatus = true;
 	}
     
 	//////////////////////////////////////////////// Getters
@@ -38,15 +40,37 @@ public class Account implements accountOperations
 	{
 		return this.limit;
 	}
-	////////////////////////////////////////////////Operations
+	
+	public boolean getTransferStatus(){
+		return this.transferStatus;
+	}
+	
+	public int getAccountNumber() {
+		return accountNumber;
+	}
+	//////////////////////////////////////////////// Setters
+	public void setTransferStatus(boolean transferStatus) {
+		this.transferStatus = transferStatus;
+	}
+	
+	public void setLimit(int limit)
+	{
+		this.limit = limit;
+	}
+	//////////////////////////////////////////////Operations
 	/**
 	 * @Description : takes in a certain amount and depending on the overdraft option reduces the balance
 	 * @param : amount to be withdrawn
 	 */
 	@Override
-	public void withdrawAmount(double amount) throws NegativeBalanceException
+	public void withdrawAmount(double amount) /*throws NegativeBalanceException*/
 	{
-		this.balance -= amount;
+		if (isAccountActive) {			
+			this.balance -= amount;
+			System.out.println("withdrawn $" + amount + " from : " + this.accountNumber+ " new balance = " + this.balance);
+		} else {
+			System.out.println("Account is suspended --");
+		}
 	}
 	
 	/**
@@ -57,37 +81,41 @@ public class Account implements accountOperations
 	@Override
 	public void depositAmount(double amount)
 	{
-		this.balance += amount;
+		if(isAccountActive){
+			this.balance += amount;
+		}else{
+			System.out.println("Account is suspended --");
+		}
 	}
 	/**
 	 * @Description : user can only see the balance and account activity; all other activities (withdrawing, depositing) are prohibited
 	 */
 	@Override
 	public void suspendAccount()
-	{  // isAccountActive = false
-		// TODO Auto-generated method stub
-		
+	{  
+		 isAccountActive = false;
 	}
 
 	@Override
 	public void reactivateAccount()
-	{ // all functionality is restored to the account
-		// TODO Auto-generated method stub
-		
+	{ 
+		isAccountActive = true;		
 	}
-
-
-	public void setLimit(int limit)
-	{
-		this.limit = limit;
-	}
-
+	
+	
 	@Override
-	public double transferAmount(double amount, Account account)
+	public void transferAmount(double amount, Account accountFrom, Account accountTo)
 	{  // transfers $xXx amount to another account
-		// TODO Auto-generated method stub
-		return 0;
+		System.out.println("Previous balance From: "+accountFrom.getBalance()+" To: "+accountTo.getBalance());
+		accountFrom.withdrawAmount(amount);
+		if(accountFrom.getTransferStatus()){
+			accountTo.depositAmount(amount);
+			System.out.println("Transfer Complete! "+amount+"$ was transfered from "+accountFrom.getAccountNumber()+" to "+accountTo.getAccountNumber());
+			System.out.println("Current balance From: "+accountFrom.getBalance()+" To: "+accountTo.getBalance());
+		}
+		System.out.println("Transfer Unsuccessful.");
 	}
+	
 
 	/////////////////////////////////////////////
 	@Override
