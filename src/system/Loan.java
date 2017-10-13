@@ -7,4 +7,6 @@ public class Loan  extends Account {
 		// TODO Auto-generated constructor stub
 	}
 
+	// Suspend services once a demand load has been created
+
 }
