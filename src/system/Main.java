@@ -101,8 +101,8 @@ public final class Main {
 				System.out.println("0. Customer status");
 				System.out.println("1. Add/Open a Chequeing Account.");
 				System.out.println("2. Add/Open a Credit Account.");
-				System.out.println("3. Add/Open a Loan Account.");
-				System.out.println("4. Transfer money.");
+				System.out.println("3. Transfer money.");
+				System.out.println("4. Terminate an account.");
 				System.out.println("5. Back.");
 				System.out.println("6. Exit");
 
@@ -145,21 +145,8 @@ public final class Main {
 					System.out.println(">>>>>Customer already has Credit Account. Opening ....");
 					Main.modifyCredit(customer.getCredit());
 					break;
+				
 				case 3:
-					if(customer.getLoan() == null){
-	//					System.out.println("Enter account number for chequing account.");
-	//					Chequeing chequeing = Chequeing.addChequeing(choice.nextInt());
-	//					
-	//					while(chequeing == null){
-	//						System.out.println("Chequing account not created. Enter a different account number for chequing account.");
-	//						chequeing = Chequeing.addChequeing(choice.nextInt());				
-	//					}		
-	//					Main.back = false;
-	//					Main.modifyChequeing(chequeing);
-					}
-					System.out.println(">>>>>Customer already has a Loan account.");
-					break;
-				case 4:
 					System.out.println("How much do you want to transfer?");
 					double transferAmt = Main.choice.nextDouble();
 						System.out.println("1. Transfer money from Chequeing to Credit.");
@@ -179,6 +166,18 @@ public final class Main {
 						break;
 					}
 					
+					break;
+				case 4:
+					System.out.println("Choose an account to terminate.");
+					System.out.println("1. Chequeing account");
+					System.out.println("2. Credit account");
+					int value = Main.choice.nextInt();
+					if (value == 1 || value == 2){
+						customer.terminateAccount(value);
+					}
+					else {
+						System.out.println("No account terminated, Please choose 1 or 2.");
+					}
 					break;
 				case 5:
 					System.out.println("Going back to previous page.");
@@ -308,12 +307,20 @@ public final class Main {
     	Customer amin = Customer.addCustomer(123321);
     		Chequeing chequeing1 = Chequeing.addChequeing(111);
 	    		chequeing1.depositAmount(10000);
-	    		chequeing1.setOverdraftOption(1);
+	    		chequeing1.setOverdraftOption(2);
 	    		chequeing1.setLimit(900);
-	    	Credit credit3 = Credit.addCredit(222);
+	    		chequeing1.withdrawAmount(10500);	    		
+	    		
+	    	Credit credit3 = Credit.addCredit(227);
 	    		credit3.setLimit(1000);
+	    		credit3.withdrawAmount(500);
     		amin.addAccount(chequeing1);
     		amin.addAccount(credit3);
+    		amin.terminateAccount(1);
+    		amin.terminateAccount(2);
+    		
+    		System.out.println("total debt: "+amin.getTotalIndebtedness());
+    		System.out.println(amin.getLoan());
     		
 //    	Customer sorab = Customer.addCustomer(321123);
 //    		Chequeing chequeing2 = Chequeing.addChequeing(112);
@@ -333,6 +340,6 @@ public final class Main {
 //			afia.addAccount(credit2);
 		
 			System.out.println("");
-    	firstPage();    	
+//    	firstPage();    	
     }
 }

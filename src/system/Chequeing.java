@@ -38,7 +38,20 @@ public class Chequeing extends Account implements Runnable {
 		threadOnce = true;		
 		System.out.println("Chequeing acc created.");		
 	}
+	//////////////////////////////////////////////////////////////////////////////////////////
+	public static HashMap<Integer, Chequeing> getChequeingAccList() {
+		return chequeingAccList;
+	}
+	
 	////////////////////////////////////////////////////////////////////////////////////////// Operations
+	public double indebtednessCalc(){
+		if(this.getBalance() < 0){
+			return (-super.getBalance());
+		}
+		return 0.0;
+	}
+	
+		
 	public static Chequeing addChequeing(int accountNumber) // only one account number can be assigned to one customer
 	{
 		if (!chequeingAccList.containsKey(accountNumber))
@@ -65,7 +78,7 @@ public class Chequeing extends Account implements Runnable {
 			overdraftChargeTime = 60000; // 60 sec			
 			takeDailyFee = true;
 			setChargingTime(); // charging time is set once when overdraft is created
-			System.out.println("Scheduled runner triggered.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+			System.out.println("Option 3 triggered thread.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ threadOnce);
 			if(threadOnce)
 				deductionThread();
 		}
@@ -131,21 +144,21 @@ public class Chequeing extends Account implements Runnable {
 	
 	@Override
 	public void run(){
-		try {
+//		try {
 			endDayOptionTwoCharge();
-		} catch (NegativeBalanceException e1) {
-			e1.printStackTrace();
-		}		
+//		} catch (NegativeBalanceException e1) {
+//			e1.printStackTrace();
+//		}		
 	}
 	
 	private void deductionThread() {
-		System.out.println("Scheduled runner triggered.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		System.out.println("Deduction thread called.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ threadOnce);
 		this.pay = Executors.newSingleThreadScheduledExecutor();
 		this.pay.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS); // checks every 5 seconds
 		this.threadOnce = false;
 	}
 	
-	private void endDayOptionTwoCharge() throws NegativeBalanceException{ 
+	private void endDayOptionTwoCharge()/* throws NegativeBalanceException*/{ 
 		String now = time.format(System.currentTimeMillis());
 		if (chosenOverdraftOption == OVER_DRAFT_OPTION_2) {
 			if (super.getBalance() < 0 && now.equals(later)) {
@@ -153,9 +166,10 @@ public class Chequeing extends Account implements Runnable {
 				this.takeDailyFee = true;
 				setChargingTime();
 			}
-		} else if(chosenOverdraftOption == OVER_DRAFT_OPTION_2) {
+		} else if(chosenOverdraftOption == OVER_DRAFT_OPTION_3) {
 			if (now.equals(later)) {
-				super.withdrawAmount(Chequeing.MONTHLY_OVERDRAFT_FEE);				
+				super.withdrawAmount(Chequeing.MONTHLY_OVERDRAFT_FEE);
+				System.out.println("Monthly fee deducted >>>>>>>>>>>>>> $"+Chequeing.MONTHLY_OVERDRAFT_FEE);
 				takeDailyFee = true;
 				setChargingTime();
 			}

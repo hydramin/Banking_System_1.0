@@ -1,12 +1,21 @@
 package system;
 
+import java.util.HashMap;
+
 public class Loan  extends Account {
 
-	protected Loan(int accountNumber) {
-		super(accountNumber);
-		// TODO Auto-generated constructor stub
+	private static HashMap<Integer, Loan> loadAccList = new HashMap<>();
+	
+	private Loan(int accountNumber) {
+		super(accountNumber);		
 	}
 
-	// Suspend services once a demand load has been created
-
+	public static Loan addLoan(int accountNumber){
+		if (!loadAccList.containsKey(accountNumber)) {
+			loadAccList.put(accountNumber, new Loan(accountNumber));
+			return loadAccList.get(accountNumber);
+		}
+		return loadAccList.get(accountNumber);
+	}
+	
 }

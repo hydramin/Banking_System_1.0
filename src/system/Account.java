@@ -5,7 +5,7 @@ public class Account implements accountOperations
 	private double balance; // the current amount in the account
     private int accountNumber; // identification for an account
     private boolean isAccountActive = true; // account active = true, account suspended = false
-    private double indebtedness; // the amount overdrawn for the particular account
+//    private double indebtedness; // the amount overdrawn for the particular account
     private int limit;
     private boolean transferStatus;
 
@@ -15,7 +15,7 @@ public class Account implements accountOperations
 	{
 		this.balance = 0;
 		this.accountNumber = accountNumber;		
-		this.indebtedness = 0;
+//		this.indebtedness = 0;
 		this.transferStatus = true;
 	}
     
@@ -29,13 +29,7 @@ public class Account implements accountOperations
 		return this.balance;
 	}
 	
-	@Override
-	public double getIndebtedness()
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	
 	public int getLimit()
 	{
 		return this.limit;
@@ -73,20 +67,6 @@ public class Account implements accountOperations
 		}
 	}
 
-//	public void withdrawAmount(double amount) throws NegativeBalanceException, AccountSuspendedException
-//	{
-//        /**
-//         * Make transaction only if account is still active.
-//         * Is the purpose of NegativeBalanceException just for us to know what happened?
-//         * cant we just record the negative balance and that be it ?
-//         */
-//	    if (isAccountActive) {
-//            this.balance -= amount;
-//            if (this.balance < 0)
-//                throw new NegativeBalanceException("Your Balance is now " + this.balance);
-//        }
-//	    else throw new AccountSuspendedException("This account has been suspended and withdrawal cannot be made");
-//	}
 	
 	/**
 	 * @Description : takes in a certain amount and increases the balance by the amount
@@ -94,11 +74,10 @@ public class Account implements accountOperations
 	 * 
 	 */
 	@Override
-	public void depositAmount(double amount)
-	{
-		if(isAccountActive){
+	public void depositAmount(double amount) {
+		if (isAccountActive) {
 			this.balance += amount;
-		}else{
+		} else {
 			System.out.println("Account is suspended --");
 		}
 	}
@@ -109,16 +88,15 @@ public class Account implements accountOperations
 	public void suspendAccount()
 
 	{
-		isAccountActive = false;		
+		isAccountActive = false;
 	}
 
 	@Override
-	public void reactivateAccount()
-	{ 
-		isAccountActive = true;		
+	public void reactivateAccount() {
+		isAccountActive = true;
 	}
 	
-	
+		
 	@Override
 	public void transferAmount(double amount, Account accountFrom, Account accountTo)
 	{  // transfers $xXx amount to another account
@@ -128,8 +106,9 @@ public class Account implements accountOperations
 			accountTo.depositAmount(amount);
 			System.out.println("Transfer Complete! "+amount+"$ was transfered from "+accountFrom.getAccountNumber()+" to "+accountTo.getAccountNumber());
 			System.out.println("Current balance From: "+accountFrom.getBalance()+" To: "+accountTo.getBalance());
+		}else{
+			System.out.println("Transfer Unsuccessful.");
 		}
-		System.out.println("Transfer Unsuccessful.");
 	}
 	
 
@@ -138,8 +117,7 @@ public class Account implements accountOperations
 	public String toString()
 	{
 		return "Acc #: "+accountNumber +"\n" +
-			   "Bal: "+balance +"\n" +
-			   "Indebt: " + indebtedness +"\n";
+			   "Bal: "+balance +"\n";			   
 	}
 
 }

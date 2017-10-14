@@ -2,7 +2,6 @@ package system;
 
 import java.util.HashMap;
 
-import org.omg.DynamicAny.DynValueBoxOperations;
 
 public class Credit extends Account
 {
@@ -16,6 +15,10 @@ public class Credit extends Account
 		CLEpenaltyStatus = false;
 		System.out.println("Credit Account Created!");
 	}
+	///////////////////////////////////////////////////////////////////////////// Getters
+	public static HashMap<Integer, Credit> getCreditAccList() {
+		return creditAccList;
+	}
 	
 	///////////////////////////////////////////////////////////////////////////// Other Operations
 	public static Credit addCredit(int accountNumber){// only one account number can be assigned to one customer
@@ -26,11 +29,14 @@ public class Credit extends Account
 		return null;
 	}
 	
+	public double indebtednessCalc(){		
+			return (super.getLimit() - super.getBalance()); 
+	}
+	
 	
 
 	@Override
 	public void withdrawAmount(double amount)/* throws NegativeBalanceException*/ { 
-//		super.withdrawAmount(amount);
 		double tempBalance = super.getBalance() - amount;
 		super.setTransferStatus(true);
 		if (tempBalance < 0) {
