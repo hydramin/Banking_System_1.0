@@ -45,7 +45,15 @@ public class AccountActivity {
     }
 
     public static void processAccountEndOfMonth() {
-        
+
+    }
+
+    public static void saveAccountLog() {
+
+    }
+
+    public static void retrieveAccountLog() {
+
     }
 
 }
