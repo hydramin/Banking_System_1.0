@@ -131,7 +131,6 @@ public class Customer {
 			int num = randomAccountNumGenerator();
 			this.loan = Loan.addAccount(num);
 		}
-
 		this.loan.depositAmount(totalIndebtedness);
 		this.totalIndebtedness = 0;
 	}

@@ -35,4 +35,17 @@ public class AccountActivity {
     public void addToList(){
         accountLog.put(SIN, this);
     }
+
+    public static void sortAccountLog() {
+
+    }
+
+    public static void processAccountLogEndOfDay() {
+
+    }
+
+    public static void processAccountEndOfMonth() {
+        
+    }
+
 }
