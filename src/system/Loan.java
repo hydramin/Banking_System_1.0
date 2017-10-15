@@ -4,18 +4,18 @@ import java.util.HashMap;
 
 public class Loan  extends Account {
 
-	private static HashMap<Integer, Loan> loadAccList = new HashMap<>();
+	private static HashMap<Integer, Loan> accountList = new HashMap<>();
 	
 	private Loan(int accountNumber) {
 		super(accountNumber);		
 	}
 
-	public static Loan addLoan(int accountNumber){
-		if (!loadAccList.containsKey(accountNumber)) {
-			loadAccList.put(accountNumber, new Loan(accountNumber));
-			return loadAccList.get(accountNumber);
+	public static Loan addAccount(int accountNumber){
+		if (!accountList.containsKey(accountNumber)) {
+			accountList.put(accountNumber, new Loan(accountNumber));
+			return accountList.get(accountNumber);
 		}
-		return loadAccList.get(accountNumber);
+		return accountList.get(accountNumber);
 	}
 	
 }

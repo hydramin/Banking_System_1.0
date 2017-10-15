@@ -115,15 +115,16 @@ public final class Main {
 				case 1:
 					if(customer.getChequeing() == null){
 						System.out.println("Enter account number for chequing account.");
-						Chequeing chequeing = Chequeing.addChequeing(choice.nextInt());
+						Chequeing chequeing = Chequeing.addAccount(choice.nextInt());
 						
 						while(chequeing == null){
 							System.out.println("Chequing account not created. Enter a different account number for chequing account.");
-							chequeing = Chequeing.addChequeing(choice.nextInt());				
+							chequeing = Chequeing.addAccount(choice.nextInt());				
 						}		
-						customer.addAccount(chequeing);
+						
 						Main.back = false;
 						Main.modifyChequeing(chequeing);
+						Main.addOrCancle(customer, chequeing);
 						break;
 					}
 					System.out.println(">>>>>Customer already has a Chequeing Account. Opening ....");
@@ -132,15 +133,16 @@ public final class Main {
 				case 2:
 					if (customer.getCredit() == null) {
 						System.out.println("Enter account number for the credit account.");
-						Credit credit = Credit.addCredit(choice.nextInt());
+						Credit credit = Credit.addAccount(choice.nextInt());
 
 						while (credit == null) {
 							System.out.println("Chequing account not created. Enter a different account number for chequing account.");
-							credit = Credit.addCredit(choice.nextInt());							
+							credit = Credit.addAccount(choice.nextInt());							
 						}
-						customer.addAccount(credit);
+						
 						Main.back = false;
 						Main.modifyCredit(credit);
+						Main.addOrCancle(customer, credit);
 					}
 					System.out.println(">>>>>Customer already has Credit Account. Opening ....");
 					Main.modifyCredit(customer.getCredit());
@@ -198,6 +200,54 @@ public final class Main {
 			}
 		}
 		Main.back = false;	
+	}
+	
+	private static void addOrCancle(Customer customer, Chequeing chequeing) {
+		
+		System.out.println("Would you like to add this account?");
+		System.out.println("1. Yes, Add account. \n2. Cancle account.");
+		boolean action = false;
+		while (!action) {
+			switch (Main.choice.nextInt()) {
+			case 1:
+				customer.addAccount(chequeing);
+				action = true;
+				break;
+			case 2:
+				chequeing.cancleAccount();
+//				Chequeing.getAccountList().remove(chequeing.getAccountNumber());
+				chequeing = null;
+				action = true;
+				break;
+			default:
+				System.out.println("Please Choose from the options.");
+				break;
+			}
+		}
+	}
+	
+private static void addOrCancle(Customer customer, Credit credit) {
+		
+		System.out.println("Would you like to add this account?");
+		System.out.println("1. Yes, Add account. \n2. Cancle account.");
+		boolean action = false;
+		while (!action) {
+			switch (Main.choice.nextInt()) {
+			case 1:
+				customer.addAccount(credit);
+				action = true;
+				break;
+			case 2:
+				credit.cancleAccount();
+//				Chequeing.getAccountList().remove(credit.getAccountNumber());
+				credit = null;
+				action = true;
+				break;
+			default:
+				System.out.println("Please Choose from the options.");
+				break;
+			}
+		}
 	}
 
 	private static void modifyCredit(Credit credit) {
@@ -278,12 +328,7 @@ public final class Main {
 				break;
 			case 4:
 				System.out.println("Enter amount to withdraw.");
-//				try {
 					chequeing.withdrawAmount(choice.nextInt());
-//				}  (NegatcatchiveBalanceException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
 				break;
 			case 5:
 				System.out.println("Going Back.");
@@ -305,41 +350,34 @@ public final class Main {
 	
     public static void main(String[] args) {
     	Customer amin = Customer.addCustomer(123321);
-    		Chequeing chequeing1 = Chequeing.addChequeing(111);
+    		Chequeing chequeing1 = Chequeing.addAccount(111);
 	    		chequeing1.depositAmount(10000);
 	    		chequeing1.setOverdraftOption(2);
 	    		chequeing1.setLimit(900);
-	    		chequeing1.withdrawAmount(10500);	    		
 	    		
-	    	Credit credit3 = Credit.addCredit(227);
+	    	Credit credit3 = Credit.addAccount(227);
 	    		credit3.setLimit(1000);
-	    		credit3.withdrawAmount(500);
     		amin.addAccount(chequeing1);
-    		amin.addAccount(credit3);
-    		amin.terminateAccount(1);
-    		amin.terminateAccount(2);
+    		amin.addAccount(credit3);    	    		
     		
-    		System.out.println("total debt: "+amin.getTotalIndebtedness());
-    		System.out.println(amin.getLoan());
-    		
-//    	Customer sorab = Customer.addCustomer(321123);
-//    		Chequeing chequeing2 = Chequeing.addChequeing(112);
-//    			chequeing2.depositAmount(1000);
-//    			chequeing2.setOverdraftOption(2);
-//    		Credit credit1 = Credit.addCredit(222);
-//    			credit1.setLimit(1500);
-//			sorab.addAccount(chequeing2);
-//			sorab.addAccount(credit1);
-//    			
-//    	Customer afia = Customer.addCustomer(890098);
-//    		Chequeing chequeing3 = Chequeing.addChequeing(113);
-//    			chequeing3.depositAmount(200000);
-//    		Credit credit2 = Credit.addCredit(223);
-//				credit2.setLimit(15000);
-//			afia.addAccount(chequeing3);
-//			afia.addAccount(credit2);
+    	Customer sorab = Customer.addCustomer(321123);
+    		Chequeing chequeing2 = Chequeing.addAccount(112);
+    			chequeing2.depositAmount(1000);
+    			chequeing2.setOverdraftOption(2);
+    		Credit credit1 = Credit.addAccount(222);
+    			credit1.setLimit(1500);
+			sorab.addAccount(chequeing2);
+			sorab.addAccount(credit1);
+    			
+    	Customer afia = Customer.addCustomer(890098);
+    		Chequeing chequeing3 = Chequeing.addAccount(113);
+    			chequeing3.depositAmount(200000);
+    		Credit credit2 = Credit.addAccount(223);
+				credit2.setLimit(15000);
+			afia.addAccount(chequeing3);
+			afia.addAccount(credit2);
 		
 			System.out.println("");
-//    	firstPage();    	
+    	firstPage();    	
     }
 }

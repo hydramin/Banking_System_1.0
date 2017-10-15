@@ -109,7 +109,7 @@ public class Customer /*implements customerOperations*/ //
 	private void loanAccCreator(){
 		if(this.loan == null){
 			int num = randomAccountNumGenerator();
-			this.loan = Loan.addLoan(num);			
+			this.loan = Loan.addAccount(num);			
 		}		
 		this.loan.depositAmount(totalIndebtedness);
 		this.totalIndebtedness = 0;
@@ -128,11 +128,11 @@ public class Customer /*implements customerOperations*/ //
 		case 1:			
 				
 			if(this.chequeing != null){
-				
+				this.chequeing.getPay().shutdown();
 				this.totalIndebtedness = this.getChequeing().indebtednessCalc(); // indebtedness from terminating chequeing account
 			// create loan account and transter the indebtedness as account balance. 
 				
-				Chequeing.getChequeingAccList().remove(this.getChequeing().getAccountNumber());
+				Chequeing.getAccountList().remove(this.getChequeing().getAccountNumber());
 				this.chequeing = null;
 				System.out.println("Chequeing account Deleted");
 			}
@@ -142,7 +142,7 @@ public class Customer /*implements customerOperations*/ //
 			if(this.credit != null){
 				this.totalIndebtedness = this.getCredit().indebtednessCalc(); // indebtedness from terminating credit account
 //				this.credit.getPay().shutdown();
-				Credit.getCreditAccList().remove(this.getCredit().getAccountNumber());
+				Credit.getAccountList().remove(this.getCredit().getAccountNumber());
 				this.credit = null;				
 				System.out.println("Credit account Deleted");
 			}

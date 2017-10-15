@@ -20,27 +20,26 @@ public class Chequeing extends Account implements Runnable {
 	public static final int OVER_DRAFT_OPTION_3 = 3; // Monthly Fixed Fee Overdraft Protection.
 	private static final double NONSUFFICIENT_FUNDS_FEE = 25; // 25 dollars fee
 	private static final double DAILY_OVERDRAFT_FEE = 5; // 5 dollars fee
-	private static final double MONTHLY_OVERDRAFT_FEE = 4; // 5 dollars fee
-	private boolean takeDailyFee;
-	private static HashMap<Integer, Chequeing> chequeingAccList= new HashMap<>();
-	private static final SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");	
-	private String later;
-	private int overdraftChargeTime;
-	private boolean threadOnce;
+	private static final double MONTHLY_OVERDRAFT_FEE = 4; // 5 dollars fee	
+	private static HashMap<Integer, Chequeing> accountList= new HashMap<>();
+//	private static final SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
 	private ScheduledExecutorService pay;
 
 	
 	////////////////////////////////////////////////////////////////////////////////////////// constructor
 	private Chequeing(int accountNumber) {
 		super(accountNumber);
-		takeDailyFee = false;
-		chosenOverdraftOption = OVER_DRAFT_OPTION_1; // Default overdraft option is Option 1.
-		threadOnce = true;		
-		System.out.println("Chequeing acc created.");		
+		chosenOverdraftOption = OVER_DRAFT_OPTION_1; // Default overdraft option is Option 1.		
+		System.out.println("Chequeing acc created.");	
+		timeThread();
 	}
-	//////////////////////////////////////////////////////////////////////////////////////////
-	public static HashMap<Integer, Chequeing> getChequeingAccList() {
-		return chequeingAccList;
+	////////////////////////////////////////////////////////////////////////////////////////// GETTERS
+	public static HashMap<Integer, Chequeing> getAccountList() {
+		return accountList;
+	}
+	
+	public ScheduledExecutorService getPay() {
+		return pay;
 	}
 	
 	////////////////////////////////////////////////////////////////////////////////////////// Operations
@@ -51,37 +50,25 @@ public class Chequeing extends Account implements Runnable {
 		return 0.0;
 	}
 	
+	public void cancleAccount(){
+		Chequeing.getAccountList().remove(super.getAccountNumber());		
+	}
+	
 		
-	public static Chequeing addChequeing(int accountNumber) // only one account number can be assigned to one customer
-	{
-		if (!chequeingAccList.containsKey(accountNumber))
-		{
-			chequeingAccList.put(accountNumber, new Chequeing(accountNumber));
-			return chequeingAccList.get(accountNumber);
+	public static Chequeing addAccount(int accountNumber){ // only one account number can be assigned to one customer	
+		if (!accountList.containsKey(accountNumber)) {
+			accountList.put(accountNumber, new Chequeing(accountNumber));
+			return accountList.get(accountNumber);
 		}
 		return null;
 	}
 	
-	public void setOverdraftOption(int option) // chequeing
-	{	
+	public void setOverdraftOption(int option){ // chequeing
+		
 		if (option < OVER_DRAFT_OPTION_1 || option > OVER_DRAFT_OPTION_3) {
 			throw new IllegalArgumentException();
 		} 
-		this.chosenOverdraftOption = option;
-//		if(option == 1)
-//			pay.;
-		if(option == 2){
-			overdraftChargeTime = 20000; //60 sec
-			
-		}
-		if(option == 3){
-			overdraftChargeTime = 60000; // 60 sec			
-			takeDailyFee = true;
-			setChargingTime(); // charging time is set once when overdraft is created
-			System.out.println("Option 3 triggered thread.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ threadOnce);
-			if(threadOnce)
-				deductionThread();
-		}
+		this.chosenOverdraftOption = option;		
 	}
 	
 	@Override
@@ -89,20 +76,21 @@ public class Chequeing extends Account implements Runnable {
 		super.setLimit(limit);
 		this.withdrawLimit = - super.getLimit();
 	}
-
+	
 	
 	@Override
 	public void withdrawAmount(double amount)/* throws NegativeBalanceException*/ {
 		super.setTransferStatus(true);
 		double tempBalance = super.getBalance() - amount;
+		
 		switch (chosenOverdraftOption) {
 		case OVER_DRAFT_OPTION_1:
-
 			if (tempBalance < withdrawLimit) {
 				super.withdrawAmount(NONSUFFICIENT_FUNDS_FEE);
 				super.setTransferStatus(false);
 				break;
-			}
+			}		
+			
 			super.withdrawAmount(amount);
 			break;
 		case OVER_DRAFT_OPTION_2:
@@ -111,16 +99,8 @@ public class Chequeing extends Account implements Runnable {
 				super.withdrawAmount(NONSUFFICIENT_FUNDS_FEE);
 				super.setTransferStatus(false);
 				break;
-			} else if(tempBalance >= withdrawLimit && tempBalance <0){
-
-				this.takeDailyFee = true;
+			} else if(tempBalance >= withdrawLimit && tempBalance <0){				
 				super.withdrawAmount(amount + DAILY_OVERDRAFT_FEE); // everytime overdraft is created fee is charged
-					
-				
-				setChargingTime(); // charging time is set once when overdraft is created
-				
-				if (threadOnce)
-					deductionThread();
 				break;
 			}
 			super.withdrawAmount(amount);		
@@ -138,51 +118,65 @@ public class Chequeing extends Account implements Runnable {
 					
 			default:
 				break;
-			}
-		
+			}		
 	}
 	
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
+
 	@Override
-	public void run(){
-//		try {
-			endDayOptionTwoCharge();
-//		} catch (NegativeBalanceException e1) {
-//			e1.printStackTrace();
-//		}		
+	public void run() {
+		log20Seconds(); // for daily deductions and logging
+		log60Seconds(); // for monthly deductions and logging
 	}
 	
-	private void deductionThread() {
-		System.out.println("Deduction thread called.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ threadOnce);
+	private void timeThread() {
+		System.out.println("Class thread called.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + super.getAccountNumber());
 		this.pay = Executors.newSingleThreadScheduledExecutor();
-		this.pay.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS); // checks every 5 seconds
-		this.threadOnce = false;
+		this.pay.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS); // checks every 5 seconds		
 	}
 	
-	private void endDayOptionTwoCharge()/* throws NegativeBalanceException*/{ 
-		String now = time.format(System.currentTimeMillis());
-		if (chosenOverdraftOption == OVER_DRAFT_OPTION_2) {
-			if (super.getBalance() < 0 && now.equals(later)) {
-				super.withdrawAmount(Chequeing.DAILY_OVERDRAFT_FEE);			
-				this.takeDailyFee = true;
-				setChargingTime();
-			}
-		} else if(chosenOverdraftOption == OVER_DRAFT_OPTION_3) {
-			if (now.equals(later)) {
-				super.withdrawAmount(Chequeing.MONTHLY_OVERDRAFT_FEE);
-				System.out.println("Monthly fee deducted >>>>>>>>>>>>>> $"+Chequeing.MONTHLY_OVERDRAFT_FEE);
-				takeDailyFee = true;
-				setChargingTime();
+	private void log20Seconds(){ // logs day end balance and deducts any overdraft fees		
+		long timeMillis = System.currentTimeMillis();
+		long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(timeMillis);
+		if(timeSeconds % 20 == 0){
+//			System.out.println("Daily dedution happened for "+ super.getAccountNumber());
+			deductDailyOverdraft();
+		}
+	}
+	
+	private void deductDailyOverdraft() {
+		if (chosenOverdraftOption == OVER_DRAFT_OPTION_2){
+			if(super.getBalance() < 0 && super.getBalance() > this.withdrawLimit){
+				super.withdrawAmount(Chequeing.DAILY_OVERDRAFT_FEE);
+				System.out.println("Daily fee deducted >>>>>>>>>>>>>> $"+Chequeing.DAILY_OVERDRAFT_FEE);
 			}
 		}
 	}
 	
-	private void setChargingTime(){
-		if(takeDailyFee){			
-			later = time.format(System.currentTimeMillis()+overdraftChargeTime); // the time to charge the account will be set at after 5 / 10 secs
-			takeDailyFee = false; // make false after time is set to : after 5 mins
-			System.out.println("NEW TIME >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ later );
+	private void deductMonthlyOverdraft() {
+		if (chosenOverdraftOption == OVER_DRAFT_OPTION_3) {
+			super.withdrawAmount(Chequeing.MONTHLY_OVERDRAFT_FEE);
+			System.out.println("Monthly fee deducted >>>>>>>>>>>>>> $"+Chequeing.MONTHLY_OVERDRAFT_FEE);
 		}
 	}
+	
+	private void log60Seconds() { // logs and deducts monthly fee and interest
+
+		long timeMillis = System.currentTimeMillis();
+		long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(timeMillis);
+		// System.out.println(timeSeconds % 20);
+		if (timeSeconds % 60 == 0){
+//			System.out.println("Monthly dedution happened for " + super.getAccountNumber());
+			deductMonthlyOverdraft();
+		}
+	}
+	
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
+	
 	
 	
 	@Override

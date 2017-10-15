@@ -7,9 +7,10 @@ import java.util.concurrent.TimeUnit;
 public class MyTimeTask implements Runnable {
 
 	static ScheduledExecutorService pay;
+	static int time;
 	public MyTimeTask() {
 		pay = Executors.newSingleThreadScheduledExecutor();
-		pay.scheduleAtFixedRate(this, 0, 5, TimeUnit.SECONDS);		
+		pay.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);		
 	}
 	public void run() {
 		System.out.println("Hello World!");

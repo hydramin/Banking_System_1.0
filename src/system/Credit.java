@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Credit extends Account
 {
 	private static final int CLEPenalty = 25;
-	private static HashMap<Integer, Credit> creditAccList = new HashMap<>();
+	private static HashMap<Integer, Credit> accountList = new HashMap<>();
 	private boolean CLEpenaltyStatus;
 
 	/////////////////////////////////////////////////////////////////////////////// Constructor
@@ -16,17 +16,21 @@ public class Credit extends Account
 		System.out.println("Credit Account Created!");
 	}
 	///////////////////////////////////////////////////////////////////////////// Getters
-	public static HashMap<Integer, Credit> getCreditAccList() {
-		return creditAccList;
+	public static HashMap<Integer, Credit> getAccountList() {
+		return accountList;
 	}
 	
 	///////////////////////////////////////////////////////////////////////////// Other Operations
-	public static Credit addCredit(int accountNumber){// only one account number can be assigned to one customer
-		if (!creditAccList.containsKey(accountNumber)) {
-			creditAccList.put(accountNumber, new Credit(accountNumber));
-			return creditAccList.get(accountNumber);
+	public static Credit addAccount(int accountNumber){// only one account number can be assigned to one customer
+		if (!accountList.containsKey(accountNumber)) {
+			accountList.put(accountNumber, new Credit(accountNumber));
+			return accountList.get(accountNumber);
 		}
 		return null;
+	}
+	
+	public void cancleAccount(){
+		Credit.getAccountList().remove(super.getAccountNumber());		
 	}
 	
 	public double indebtednessCalc(){		
