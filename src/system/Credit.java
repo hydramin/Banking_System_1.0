@@ -2,7 +2,6 @@ package system;
 
 import java.util.HashMap;
 
-
 public class Credit extends Account {
 	private static final int CLEPenalty = 25;
 	private static HashMap<Integer, Credit> creditAccList = new HashMap<>();
@@ -18,8 +17,9 @@ public class Credit extends Account {
     //////////////////////////  GETTERS  //////////////////////////
 
     /**
+     * @Description: This method returns the HasMap containing the credit accounts.
      *
-     * @return
+     * @return Object of type HasMap mapping account numbers with credit accounts.
      */
 	public static HashMap<Integer, Credit> getCreditAccList() {
 		return creditAccList;
@@ -28,12 +28,13 @@ public class Credit extends Account {
     //////////////////////////  SETTERS  //////////////////////////
 
     /**
+     * @Description: This method sets the limit of the account. This limit is the spending limit.
+     *              The CLE penalty can be determined as soon as the credit limit is set.
      *
-     * @param limit
+     * @param limit value of type int representing the spending limit.
      */
     @Override
     public void setLimit(int limit) {
-        // the CLE penalty can be determined as soon as the Credit Limit is set
         super.setLimit(limit);
         super.depositAmount(limit);
         CLEpenaltyStatus = (limit > 1000) ? true : false;
@@ -42,9 +43,13 @@ public class Credit extends Account {
     //////////////////////////  OPERATIONS  //////////////////////////
 
     /**
+     * @Description: This method is the only way to create a new credit account. A new account number is passed
+     *              as a parameter and if the account is not in the system, it will be added as a new one.
+     *              The new account is then passed in to the list of accounts map(accountList).
      *
-     * @param accountNumber
-     * @return
+     * @param accountNumber value of type int representing the account number.
+     *
+     * @return account of type credit.
      */
     public static Credit addCredit(int accountNumber){
         if (!creditAccList.containsKey(accountNumber))
@@ -53,14 +58,18 @@ public class Credit extends Account {
     }
 
     /**
+     * @Description: This method calculates the indebtedness of the account.
      *
-     * @return
+     * @return double representing indebtedness.
      */
 	public double indebtednessCalc(){		
 			return (super.getLimit() - super.getBalance()); 
 	}
 
     /**
+     * @Description: This method is a means of withdrawing a specified amount from the account.
+     *              It checks if the withdraw would result in a negative balance in which case
+     *              depending on the penalty status, a penalty would be charged.
      *
      * @param amount value of type double to be withdrawn.
      */
@@ -79,6 +88,7 @@ public class Credit extends Account {
 	}
 
     /**
+     * @Description: This method charges the CLE penalty from the account.
      *
      */
 	private void chargeCLEPenalty(){
@@ -86,6 +96,7 @@ public class Credit extends Account {
 	}
 
     /**
+     * @Description: This method is a means of declining withdrawal. It sets the transfer status to false.
      *
      */
 	private void declineWithdrawal(){
@@ -94,6 +105,7 @@ public class Credit extends Account {
 	}
 
     /**
+     * @Description: This method is a means of depositing a specified amount.
      *
      * @param amount value of type double to be deposited.
      */
