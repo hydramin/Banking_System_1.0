@@ -7,10 +7,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Chequeing extends Account implements Runnable {
-	
 	// The account gets created and it will be modified
-
-//	private double overdraftLimit; // set a the overdraft limit
+	//private double overdraftLimit; // set a the overdraft limit
 	private int chosenOverdraftOption;
 	private double withdrawLimit;
 	public static final int OVER_DRAFT_OPTION_1 = 1; // No Overdraft Protection: with this option, if a withdrawal from the
@@ -29,8 +27,7 @@ public class Chequeing extends Account implements Runnable {
 	private boolean threadOnce;
 	private ScheduledExecutorService pay;
 
-	
-	////////////////////////////////////////////////////////////////////////////////////////// constructor
+	////////////////////////////// CONSTRUCTOR
 	private Chequeing(int accountNumber) {
 		super(accountNumber);
 		takeDailyFee = false;
@@ -38,42 +35,37 @@ public class Chequeing extends Account implements Runnable {
 		threadOnce = true;		
 		System.out.println("Chequeing acc created.");		
 	}
-	//////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////  GETTERS  //////////////////////////
+
 	public static HashMap<Integer, Chequeing> getChequeingAccList() {
 		return chequeingAccList;
 	}
-	
-	////////////////////////////////////////////////////////////////////////////////////////// Operations
+
+    //////////////////////////  SETTERS  //////////////////////////
+
+    //////////////////////////  OPERATIONS  //////////////////////////
+
 	public double indebtednessCalc(){
-		if(this.getBalance() < 0){
+		if(this.getBalance() < 0)
 			return (-super.getBalance());
-		}
 		return 0.0;
 	}
-	
-		
-	public static Chequeing addChequeing(int accountNumber) // only one account number can be assigned to one customer
-	{
+
+	public static Chequeing addChequeing(int accountNumber){
 		if (!chequeingAccList.containsKey(accountNumber))
-		{
 			chequeingAccList.put(accountNumber, new Chequeing(accountNumber));
-			return chequeingAccList.get(accountNumber);
-		}
-		return null;
+        return chequeingAccList.get(accountNumber);
 	}
 	
-	public void setOverdraftOption(int option) // chequeing
-	{	
-		if (option < OVER_DRAFT_OPTION_1 || option > OVER_DRAFT_OPTION_3) {
+	public void setOverdraftOption(int option){
+		if (option < OVER_DRAFT_OPTION_1 || option > OVER_DRAFT_OPTION_3)
 			throw new IllegalArgumentException();
-		} 
 		this.chosenOverdraftOption = option;
-//		if(option == 1)
-//			pay.;
-		if(option == 2){
+        // if(option == 1)
+        //    pay.;
+		if(option == 2)
 			overdraftChargeTime = 20000; //60 sec
-			
-		}
 		if(option == 3){
 			overdraftChargeTime = 60000; // 60 sec			
 			takeDailyFee = true;
@@ -90,14 +82,12 @@ public class Chequeing extends Account implements Runnable {
 		this.withdrawLimit = - super.getLimit();
 	}
 
-	
 	@Override
 	public void withdrawAmount(double amount)/* throws NegativeBalanceException*/ {
 		super.setTransferStatus(true);
 		double tempBalance = super.getBalance() - amount;
 		switch (chosenOverdraftOption) {
 		case OVER_DRAFT_OPTION_1:
-
 			if (tempBalance < withdrawLimit) {
 				super.withdrawAmount(NONSUFFICIENT_FUNDS_FEE);
 				super.setTransferStatus(false);
@@ -106,25 +96,19 @@ public class Chequeing extends Account implements Runnable {
 			super.withdrawAmount(amount);
 			break;
 		case OVER_DRAFT_OPTION_2:
-
 			if (tempBalance < withdrawLimit) {
 				super.withdrawAmount(NONSUFFICIENT_FUNDS_FEE);
 				super.setTransferStatus(false);
 				break;
 			} else if(tempBalance >= withdrawLimit && tempBalance <0){
-
 				this.takeDailyFee = true;
 				super.withdrawAmount(amount + DAILY_OVERDRAFT_FEE); // everytime overdraft is created fee is charged
-					
-				
 				setChargingTime(); // charging time is set once when overdraft is created
-				
 				if (threadOnce)
 					deductionThread();
 				break;
 			}
-			super.withdrawAmount(amount);		
-				
+			super.withdrawAmount(amount);
 				break;
 		case OVER_DRAFT_OPTION_3:
 			if (tempBalance < withdrawLimit) {
@@ -132,23 +116,20 @@ public class Chequeing extends Account implements Runnable {
 				super.setTransferStatus(false);
 				break;
 			}
-				
 			super.withdrawAmount(amount); // everytime overdraft is created fee is charged
 			break;
-					
 			default:
 				break;
 			}
-		
 	}
 	
 	@Override
 	public void run(){
-//		try {
+        // try {
 			endDayOptionTwoCharge();
-//		} catch (NegativeBalanceException e1) {
-//			e1.printStackTrace();
-//		}		
+        // } catch (NegativeBalanceException e1) {
+        //		e1.printStackTrace();
+        // }
 	}
 	
 	private void deductionThread() {
@@ -158,7 +139,7 @@ public class Chequeing extends Account implements Runnable {
 		this.threadOnce = false;
 	}
 	
-	private void endDayOptionTwoCharge()/* throws NegativeBalanceException*/{ 
+	private void endDayOptionTwoCharge(){
 		String now = time.format(System.currentTimeMillis());
 		if (chosenOverdraftOption == OVER_DRAFT_OPTION_2) {
 			if (super.getBalance() < 0 && now.equals(later)) {
@@ -183,14 +164,11 @@ public class Chequeing extends Account implements Runnable {
 			System.out.println("NEW TIME >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+ later );
 		}
 	}
-	
-	
+
 	@Override
 	public String toString() {
 		return super.toString() + "Option: " + this.chosenOverdraftOption +"\n"+ 
 								  "overdraft Limit: "+ super.getLimit() +"\n" +
 								  "withdraw Limit: "+ withdrawLimit+"\n";
 	}
-
-	
 }

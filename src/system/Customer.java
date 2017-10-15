@@ -13,8 +13,9 @@ public class Customer {
 	private int loanAccNum;
 	private static HashMap<Integer, Customer> customerList = new HashMap<>();
 
-	private Customer(int securityNumber) 
-	{
+    ////////////////////////////// CONSTRUCTOR
+
+	private Customer(int securityNumber) {
 		this.securityNumber = securityNumber;
 		this.chequeing = null;
 		this.credit = null;
@@ -131,20 +132,29 @@ public class Customer {
 	}
 
     /**
-     * @Description:
-     * @return
+     * @Description: This method returns a three digit random number between 100 to 999.
+     *              This number is used as the account number to create a unique Demand loan account.
+     *
+     * @return  random number of type int.
      */
 	private int randomAccountNumGenerator(){
 		Random random = new Random();
 		return random.nextInt(999) + 100;
 	}
-	
+
+    /**
+     * @Description: This method terminates a specified account.
+     *              Before termination, this method ensures to take all the
+     *              indebtedness of a specified account and add to total indebtedness.
+     *
+     * @param account is an int representing the type of account to be terminated.
+     */
 	public void terminateAccount(int account){
 		switch (account) {
 		case 1:
 			if(this.chequeing != null){
 				this.totalIndebtedness = this.getChequeing().indebtednessCalc(); // indebtedness from terminating chequeing account
-			// create loan account and transter the indebtedness as account balance.
+			    // create loan account and transter the indebtedness as account balance.
 				Chequeing.getChequeingAccList().remove(this.getChequeing().getAccountNumber());
 				this.chequeing = null;
 				System.out.println("Chequeing account Deleted");
