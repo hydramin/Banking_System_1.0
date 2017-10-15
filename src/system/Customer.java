@@ -97,6 +97,7 @@ public class Customer {
      */
 	public void addAccount(Chequeing account){
 		this.chequeing = account;
+		this.chequeing.setSIN(this.securityNumber);
 	}
 
     /**
@@ -201,5 +202,5 @@ public class Customer {
         		+ "Chequeing Account:>>>>> \n%s\n"
         		+ "Credit Account:>>>>> \n%s\n"
         		+ "Loan Account:>>>>>\n%s",securityNumber, this.chequeing, this.credit, this.loan);
-	}	
+	}
 }

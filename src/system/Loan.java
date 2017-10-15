@@ -24,6 +24,5 @@ public class Loan extends Account {
 			return accountList.get(accountNumber);
 		}
 		return accountList.get(accountNumber);
-
 	}
 }

@@ -3,6 +3,7 @@ package system;
 public class Account implements accountOperations {
 	private double balance; // the current amount in the account
     private int accountNumber; // identification for an account
+    private int SIN;
     private boolean isAccountActive = true; // account active = true, account suspended = false
 	// private double indebtedness; // the amount overdrawn for the particular account
     private int limit;
@@ -72,6 +73,10 @@ public class Account implements accountOperations {
 		this.limit = limit;
 	}
 
+	public void setSIN(int SIN) {
+	    this.SIN = SIN;
+    }
+
     //////////////////////////  OPERATIONS  //////////////////////////
 
 	/**
@@ -83,6 +88,7 @@ public class Account implements accountOperations {
 	public void withdrawAmount(double amount) {
 		if (isAccountActive) {			
 			this.balance -= amount;
+			record("Withdrawal", amount,  this.balance);
 			System.out.println("withdrawn $" + amount + " from : " + this.accountNumber+ " new balance = " + this.balance);
 		} else
 			System.out.println("Account is suspended --");
@@ -97,6 +103,7 @@ public class Account implements accountOperations {
 	public void depositAmount(double amount) {
 		if (isAccountActive) {
 			this.balance += amount;
+            record("Withdrawal", amount,  this.balance);
 		} else
 			System.out.println("Account is suspended --");
 	}
@@ -138,6 +145,15 @@ public class Account implements accountOperations {
 		}else
 			System.out.println("Transfer Unsuccessful.");
 	}
+
+	public void record(String tranType, double amount, double balance){
+	    AccountActivity accountActivity = new AccountActivity(this.SIN, this.accountNumber);
+
+	    accountActivity.setTransactionType(tranType);
+        accountActivity.setTransactionAmount(amount);
+        accountActivity.setBalance(balance);
+        accountActivity.addToList();
+    }
 
     /**
      *
