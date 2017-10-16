@@ -62,6 +62,7 @@ public class AccountActivity{
     public void addToList(){
         accountLog.put(SIN, this);
     }
+
     
     @Override
     public String toString() {    	
@@ -69,4 +70,27 @@ public class AccountActivity{
     						this.SIN, this.accountNumber, this.transactionDate, this.transactionType, this.transactionAmount,this.balance, this.comment);
     }
     
+
+
+    public static void sortAccountLog() {
+
+    }
+
+    public static void processAccountLogEndOfDay() {
+
+    }
+
+    public static void processAccountEndOfMonth() {
+
+    }
+
+    public static void saveAccountLog() {
+
+    }
+
+    public static void retrieveAccountLog() {
+
+    }
+
+
 }

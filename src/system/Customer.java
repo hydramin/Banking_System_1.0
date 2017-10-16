@@ -138,7 +138,6 @@ public class Customer {
 			this.loan = Loan.createAccount(num);
 			this.loan.setSIN(this.getSIN());
 		}
-
 		this.loan.depositAmount(totalIndebtedness);
 		this.totalIndebtedness = 0;
 	}

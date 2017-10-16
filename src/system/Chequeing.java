@@ -139,7 +139,7 @@ public class Chequeing extends Account/* implements Runnable*/ {
 	public void withdrawAmount(double amount) {
 		super.setTransferStatus(true);
 		double tempBalance = super.getBalance() - amount;
-		super.setComment(String.format("$%.2f deposited in Acc: %d", amount,super.getAccountNumber()));
+		super.setComment(String.format("$%.2f withdrawn from Acc: %d", amount,super.getAccountNumber()));
 		switch (chosenOverdraftOption) {
 		case OVER_DRAFT_OPTION_1:
 			if (tempBalance < withdrawLimit) {
@@ -159,7 +159,7 @@ public class Chequeing extends Account/* implements Runnable*/ {
 				break;
 			} else if (tempBalance >= withdrawLimit && tempBalance < 0) {				
 				super.withdrawAmount(amount); // everytime overdraft is created fee is charged
-				super.setComment(NSF_CHARGED);
+				super.setComment(DAILY_OVERDRAFT_CHARGED);
 				super.withdrawAmount(DAILY_OVERDRAFT_FEE); // everytime overdraft is created fee is charged
 				break;
 			}
