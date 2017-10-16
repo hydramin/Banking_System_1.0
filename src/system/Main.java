@@ -7,8 +7,11 @@ import java.util.Scanner;
 
 public final class Main {
 	
-	static boolean back = false;
-	static Scanner choice = new Scanner(System.in);
+	private static boolean back = false;
+	private static Scanner choice = new Scanner(System.in);
+	private static String boundary = "<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>\n"
+									+ "<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>\n"
+									+ "<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>\n"; 
 	
 	
 	//////////////////////////////////////////////////////////////////////////// methods
@@ -19,7 +22,8 @@ public final class Main {
 			System.out.println("What would you like to do? Enter a number option.");
 			System.out.println("1. Work with existing customers.");
 			System.out.println("2. Add a new customer.");
-			System.out.println("3. Exit.");
+			System.out.println("3. Current Activity log of all accounts");
+			System.out.println("4. Exit.");
 
 			switch (choice.nextInt()) {
 			case 1:
@@ -39,9 +43,14 @@ public final class Main {
 				Main.workOnCustomer(customer);
 				break;
 			case 3:
+				System.out.println("Account log\n"+boundary);				
+				for (AccountActivity a : AccountActivity.getAccountLog().entrySet()) {
+					System.out.println(a);
+				}
+				break;
+			case 4:
 				System.out.println("Exiting System!");				
 				System.exit(0);
-//				System.out.println(Customer.getCustomerList());
 				break;
 
 			default:
@@ -108,21 +117,21 @@ public final class Main {
 
 				switch (choice.nextInt()) {
 				case 0:
-					System.out.println("//////////////// Customer status of accounts. //////////////////");
+					System.out.println(boundary+"Customer's Status.\n");
 					System.out.println(customer + "\n");
-					System.out.println("//////////////////////////////////");
 					break;
 				case 1:
 					if(customer.getChequeing() == null){
 						System.out.println("Enter account number for chequing account.");
-						Chequeing chequeing = Chequeing.addAccount(choice.nextInt());
+						Chequeing chequeing = Chequeing.createAccount(choice.nextInt());
 						
 						while(chequeing == null){
 							System.out.println("Chequing account not created. Enter a different account number for chequing account.");
-							chequeing = Chequeing.addAccount(choice.nextInt());				
+							chequeing = Chequeing.createAccount(choice.nextInt());				
 						}		
+						chequeing.setSIN(customer.getSIN());
 						
-						Main.back = false;
+						Main.back = false;						
 						Main.modifyChequeing(chequeing);
 						Main.addOrCancle(customer, chequeing);
 						break;
@@ -133,19 +142,20 @@ public final class Main {
 				case 2:
 					if (customer.getCredit() == null) {
 						System.out.println("Enter account number for the credit account.");
-						Credit credit = Credit.addAccount(choice.nextInt());
+						Credit credit = Credit.createAccount(choice.nextInt());
 
 						while (credit == null) {
 							System.out.println("Chequing account not created. Enter a different account number for chequing account.");
-							credit = Credit.addAccount(choice.nextInt());							
+							credit = Credit.createAccount(choice.nextInt());							
 						}
+						credit.setSIN(customer.getSIN());						
 						
-						Main.back = false;
 						Main.modifyCredit(credit);
 						Main.addOrCancle(customer, credit);
 					}
 					System.out.println(">>>>>Customer already has Credit Account. Opening ....");
 					Main.modifyCredit(customer.getCredit());
+					Main.back = false;
 					break;
 				
 				case 3:
@@ -167,7 +177,7 @@ public final class Main {
 						System.out.println("Choose from the options.");
 						break;
 					}
-					
+					Main.back = false;
 					break;
 				case 4:
 					System.out.println("Choose an account to terminate.");
@@ -180,6 +190,7 @@ public final class Main {
 					else {
 						System.out.println("No account terminated, Please choose 1 or 2.");
 					}
+					Main.back = false;
 					break;
 				case 5:
 					System.out.println("Going back to previous page.");
@@ -211,6 +222,7 @@ public final class Main {
 			switch (Main.choice.nextInt()) {
 			case 1:
 				customer.addAccount(chequeing);
+//				chequeing.setSIN(customer.getSIN());
 				action = true;
 				break;
 			case 2:
@@ -235,6 +247,7 @@ private static void addOrCancle(Customer customer, Credit credit) {
 			switch (Main.choice.nextInt()) {
 			case 1:
 				customer.addAccount(credit);
+//				credit.setSIN(customer.getSIN());
 				action = true;
 				break;
 			case 2:
@@ -253,14 +266,15 @@ private static void addOrCancle(Customer customer, Credit credit) {
 	private static void modifyCredit(Credit credit) {
 		while (!back) {
 			System.out.println("Modify this credit account. Details:");
-			System.out.println("//////////////////////////////////");
+			System.out.println(boundary);
 			System.out.println(credit.toString());
-			System.out.println("//////////////////////////////////");
+			System.out.println(boundary);
 			
 			System.out.println("What would you like to modify?");			
 			System.out.println("1. Change credit limit.");
-			System.out.println("2. Back");
-			System.out.println("3. Exit");
+			System.out.println("2. Withdraw money.");
+			System.out.println("3. Back");
+			System.out.println("4. Exit");
 			
 			switch (Main.choice.nextInt()) {
 			case 1:
@@ -272,11 +286,15 @@ private static void addOrCancle(Customer customer, Credit credit) {
 				}
 				credit.setLimit(creditLimit);
 				break;
-			case 2:
+			case 2:				
+				System.out.println("Enter amount to withdraw.");
+				credit.withdrawAmount(choice.nextInt());
+				break;
+			case 3:
 				System.out.println("Going back to previous page.");
 				Main.back = true;
 				break;
-			case 3:
+			case 4:
 				System.out.println("Exiting System!");
 				System.exit(0);
 				break;
@@ -286,7 +304,7 @@ private static void addOrCancle(Customer customer, Credit credit) {
 				break;
 			}
 		}
-		Main.back = true;
+		Main.back = false;
 	}
 	private static void modifyChequeing(Chequeing chequeing) {
 		while(!back){
@@ -349,35 +367,45 @@ private static void addOrCancle(Customer customer, Credit credit) {
 	////////////////////////////////////////////////////////////////////////////
 	
     public static void main(String[] args) {
-    	Customer amin = Customer.addCustomer(123321);
-    		Chequeing chequeing1 = Chequeing.addAccount(111);
+    	Customer amin = Customer.addCustomer(111111);
+    		Chequeing chequeing1 = Chequeing.createAccount(111);
+    		chequeing1.setSIN(amin.getSIN());
 	    		chequeing1.depositAmount(10000);
 	    		chequeing1.setOverdraftOption(2);
 	    		chequeing1.setLimit(900);
 	    		
-	    	Credit credit3 = Credit.addAccount(227);
-	    		credit3.setLimit(1000);
+	    	Credit credit1 = Credit.createAccount(227);
+	    		credit1.setSIN(amin.getSIN());
+	    		credit1.setLimit(1000);
+	    		
     		amin.addAccount(chequeing1);
-    		amin.addAccount(credit3);    	    		
+    		amin.addAccount(credit1);    	    		
     		
-    	Customer sorab = Customer.addCustomer(321123);
-    		Chequeing chequeing2 = Chequeing.addAccount(112);
+    	Customer sorab = Customer.addCustomer(222222);
+    		Chequeing chequeing2 = Chequeing.createAccount(112);
+			chequeing2.setSIN(sorab.getSIN());
     			chequeing2.depositAmount(1000);
     			chequeing2.setOverdraftOption(2);
-    		Credit credit1 = Credit.addAccount(222);
-    			credit1.setLimit(1500);
+    		Credit credit2 = Credit.createAccount(222);
+			credit2.setSIN(sorab.getSIN());
+    			credit2.setLimit(1500);
 			sorab.addAccount(chequeing2);
-			sorab.addAccount(credit1);
+			sorab.addAccount(credit2);
     			
-    	Customer afia = Customer.addCustomer(890098);
-    		Chequeing chequeing3 = Chequeing.addAccount(113);
+    	Customer afia = Customer.addCustomer(333333);
+    		Chequeing chequeing3 = Chequeing.createAccount(113);
+    		chequeing3.setSIN(afia.getSIN());
     			chequeing3.depositAmount(200000);
-    		Credit credit2 = Credit.addAccount(223);
-				credit2.setLimit(15000);
+    		Credit credit3 = Credit.createAccount(223);
+    		credit3.setSIN(afia.getSIN());
+    			credit3.setLimit(15000);
 			afia.addAccount(chequeing3);
-			afia.addAccount(credit2);
+			afia.addAccount(credit3);
 		
 			System.out.println("");
-    	firstPage();    	
+    	firstPage();
+//			System.out.println(AccountActivity.getAccountLog().size());
+			
+			
     }
 }

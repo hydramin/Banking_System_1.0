@@ -1,6 +1,7 @@
 package system;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class Credit extends Account {
 	private static final int CLEPenalty = 25;
@@ -11,7 +12,7 @@ public class Credit extends Account {
 
 	private Credit(int accountNumber) {
 		super(accountNumber);
-		System.out.println("Credit Account Created!");
+//		super.record("-", 0.0, "Chequeing account created");
 	}
 
 	//////////////////////////////////////////  GETTERS  //////////////////////////////////////////
@@ -36,12 +37,15 @@ public class Credit extends Account {
      * <dt><b>Precondition:</b><dd> The argument limit must be an integer value.
      * <dt><b>Postcondition:</b><dd> The spending limit of the credit account of the customer will be set to limit.
 	 */
-	@Override
-	public void setLimit(int limit) {
-		super.setLimit(limit);
-		super.depositAmount(limit);
-		CLEpenaltyStatus = (limit > 1000);
-	}
+    @Override
+    public void setLimit(int limit) {
+        Account.setComment(String.format("Credit limit set to $%d", limit));
+        super.setLimit(limit);
+        Account.setTransfer(true);
+        super.depositAmount(limit);
+        CLEpenaltyStatus = (limit > 1000);
+    }
+
 
 	//////////////////////////////////////////  OPERATIONS  //////////////////////////////////////////
 
@@ -57,7 +61,7 @@ public class Credit extends Account {
      *
 	 * @return account of type credit.
 	 */
-	static Credit addAccount(int accountNumber){
+	static Credit createAccount(int accountNumber){
 			if (!accountList.containsKey(accountNumber))
 				accountList.put(accountNumber, new Credit(accountNumber));
         return accountList.get(accountNumber);
@@ -66,9 +70,10 @@ public class Credit extends Account {
     /**
      *
      */
-	public void cancleAccount(){
-		Credit.getAccountList().remove(super.getAccountNumber());		
-	}
+    public void cancleAccount(){
+        Credit.getAccountList().remove(super.getAccountNumber());
+        super.record("-", 0.0, String.format("Credit account: %d cancled.", super.getAccountNumber()));
+    }
 
     /**
      * <dt><b>Description:</b><dd> This method calculates the indebtedness of the account.
@@ -79,7 +84,6 @@ public class Credit extends Account {
      *
      * @return double representing indebtedness.
      */
-
 	public double indebtednessCalc(){		
 			return (super.getLimit() - super.getBalance()); 
 	}
@@ -97,16 +101,19 @@ public class Credit extends Account {
      */
 	@Override
 	public void withdrawAmount(double amount){
+		super.setComment(String.format("$%.2f withdrawn from Acc: %d", amount,super.getAccountNumber()));
 		super.setTransferStatus(true);
 		if ((super.getBalance() - amount) < 0) {
 			super.setTransferStatus(false);
 			if (this.CLEpenaltyStatus) {
 				chargeCLEPenalty();
 				declineWithdrawal();
-			} else
+			} else{
 				declineWithdrawal();
-		} else
+			}
+		} else{
 			super.withdrawAmount(amount);
+		}
 	}
 
     /**
@@ -116,6 +123,7 @@ public class Credit extends Account {
      * <dt><b>Postcondition:</b><dd>
      */
 	private void chargeCLEPenalty(){
+		Account.setComment(String.format("Credit account charged fee. Transaction passed credit limit $%d.", Credit.CLEPenalty));
 		super.withdrawAmount(Credit.CLEPenalty);
 	}
 
@@ -126,7 +134,7 @@ public class Credit extends Account {
      * <dt><b>Postcondition:</b><dd>
      */
 	private void declineWithdrawal(){
-		System.out.println("Withdrawal Declined!");
+		super.record("Withdrawal", super.getNoTransaction(), "Withdrawal Declined!");
 		super.setTransferStatus(false);
 	}
 
@@ -147,9 +155,36 @@ public class Credit extends Account {
      *
      * @return
      */
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
+
+		
+		@Override
+		protected void log20Seconds(){ // logs day end balance and deducts any overdraft fees	
+			if(super.time() % 20 == 0){
+				super.record("-", super.getNoTransaction(), END_DAY);
+			}
+		}		
+	
+		
+	
+		@Override
+		protected void log60Seconds() { // logs and deducts monthly fee and interest
+
+			if (super.time() % 60 == 0){
+				super.record("-", super.getNoTransaction(), END_MONTH);
+			}
+		}
+		
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
 	@Override
 	public String toString(){
 		String CLEstatusDisplay = (CLEpenaltyStatus) ? "High Credit Limit & CLE penalty" : "Low Credit Limit & No CLE penalty";
 		return super.toString() + "CLE Penalty: "+CLEstatusDisplay +"\n";
 	}
+
+
 }

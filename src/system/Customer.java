@@ -76,6 +76,10 @@ public class Customer {
     public double getTotalIndebtedness() {
         return totalIndebtedness;
     }
+    
+    public int getSIN() {
+		return securityNumber;
+	}
 
     //////////////////////////  OPERATIONS  //////////////////////////
 
@@ -124,6 +128,7 @@ public class Customer {
      */
 	public void addAccount(Credit account){
 		this.credit = account;
+		this.credit.setSIN(this.securityNumber);
 	}
 
     /**
@@ -137,6 +142,7 @@ public class Customer {
      */
 	public void addAccount(Loan account){
 		this.loan = account;
+		this.loan.setSIN(this.securityNumber);
 	}
 
     /**
@@ -149,8 +155,9 @@ public class Customer {
 	private void loanAccCreator() {
 		if (this.loan == null)
 			this.loan = Loan.addAccount(randomAccountNumGenerator());
-		this.loan.depositAmount(totalIndebtedness);
-		this.totalIndebtedness = 0;
+        this.loan.setSIN(this.getSIN());
+        this.loan.depositAmount(totalIndebtedness);
+        this.totalIndebtedness = 0;
 	}
 
     /**
@@ -179,6 +186,7 @@ public class Customer {
 		case 1:
 			if(this.chequeing != null){
 				this.chequeing.getPay().shutdown();
+//				this.chequeing.getPay().shutdown();
 				this.totalIndebtedness = this.getChequeing().indebtednessCalc(); // indebtedness from terminating chequeing account
 				// create loan account and transfer the indebtedness as account balance.
 				this.chequeing.record("Terminate", 0.0, this.chequeing.getBalance());
@@ -220,4 +228,5 @@ public class Customer {
         		+ "Credit Account:>>>>> \n%s\n"
         		+ "Loan Account:>>>>>\n%s",securityNumber, this.chequeing, this.credit, this.loan);
 	}
+	
 }

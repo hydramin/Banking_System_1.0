@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class Chequeing extends Account implements Runnable {
+public class Chequeing extends Account/* implements Runnable*/ {
 	//private double overdraftLimit; // set a the overdraft limit
 	private int chosenOverdraftOption;
 	private double withdrawLimit;
@@ -18,6 +18,12 @@ public class Chequeing extends Account implements Runnable {
 	private static final double NONSUFFICIENT_FUNDS_FEE = 25; // 25 dollars fee
 	private static final double DAILY_OVERDRAFT_FEE = 5; // 5 dollars fee
 	private static final double MONTHLY_OVERDRAFT_FEE = 4; // 5 dollars fee	
+	
+	private static final String NSF_CHARGED = "Non-Sufficient fee charged";
+	private static final String DAILY_OVERDRAFT_CHARGED = "Daily overdraft fee charge";
+	private static final String MONTHLY_OVERDRAFT_CHARGED = "Monthly overdraft fee charge";
+	
+
 	private static HashMap<Integer, Chequeing> accountList= new HashMap<>();
 	private ScheduledExecutorService pay;
 
@@ -29,8 +35,11 @@ public class Chequeing extends Account implements Runnable {
 		System.out.println("Chequeing acc created.");	
 		timeThread();
 	}
+    /////\/\///////////////////////////////////////////  GETTERS  //////////////////////////////////////////////////// 
+    ////\/\/\///////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
+    ///\/==\/\//////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
+    //\/////\/\/////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
 
-    //////////////////////////////////////////  GETTERS  //////////////////////////////////////////
 	/**
 	* <dt><b>Description:</b><dd> This method returns the HasMap containing the chequeing accounts.
 	*
@@ -50,6 +59,10 @@ public class Chequeing extends Account implements Runnable {
 	}
 
     //////////////////////////////////////////  SETTERS  //////////////////////////////////////////
+    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
 
     /**
      * <dt><b>Description:</b><dd> This method sets the limit of the account.
@@ -61,11 +74,18 @@ public class Chequeing extends Account implements Runnable {
      */
     @Override
     public void setLimit(int limit) {
+    	Account.setComment(String.format("Overdraft limit set to $%d.", limit));
         super.setLimit(limit);
         this.withdrawLimit = - super.getLimit();
     }
 
     //////////////////////////////////////////  OPERATIONS  //////////////////////////////////////////
+
+    ////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
+
 
     /**
      * <dt><b>Description:</b><dd> This method calculates the indebtedness of the account.
@@ -86,9 +106,10 @@ public class Chequeing extends Account implements Runnable {
      *
      */
 	public void cancleAccount(){
-		Chequeing.getAccountList().remove(super.getAccountNumber());		
+		Chequeing.getAccountList().remove(super.getAccountNumber());
+		super.record("-", 0.0, String.format("Credit account: %d cancled.", super.getAccountNumber()));
 	}
-	
+
     /**
      * <dt><b>Description:</b><dd> This method is the only way to create a new chequeing account. A new account number is passed
      *              as a parameter and if the account is not in the system, it will be added as a new one.
@@ -101,7 +122,7 @@ public class Chequeing extends Account implements Runnable {
      *
      * @return account of type Chequeing.
      */
-	public static Chequeing addAccount(int accountNumber){
+	public static Chequeing createAccount(int accountNumber){
 		if (!accountList.containsKey(accountNumber))
 			accountList.put(accountNumber, new Chequeing(accountNumber));
         return accountList.get(accountNumber);
@@ -119,7 +140,14 @@ public class Chequeing extends Account implements Runnable {
 	public void setOverdraftOption(int option){
 		if (option < OVER_DRAFT_OPTION_1 || option > OVER_DRAFT_OPTION_3)
 			throw new IllegalArgumentException();
-		this.chosenOverdraftOption = option;		
+		this.chosenOverdraftOption = option;
+        super.record("-", Account.getNoTransaction(), String.format("Overdraft option %d chosen for Account %d ", option,super.getAccountNumber()));
+	}
+	
+	@Override
+	public void depositAmount(double amount) {
+		super.setComment(String.format("$%.2f deposited in Acc: %d", amount,super.getAccountNumber()));
+		super.depositAmount(amount);
 	}
 	
     /**
@@ -139,28 +167,35 @@ public class Chequeing extends Account implements Runnable {
 	public void withdrawAmount(double amount) {
 		super.setTransferStatus(true);
 		double tempBalance = super.getBalance() - amount;
+		super.setComment(String.format("$%.2f withdrawn from Acc: %d", amount,super.getAccountNumber()));
 		switch (chosenOverdraftOption) {
 		case OVER_DRAFT_OPTION_1:
 			if (tempBalance < withdrawLimit) {
+				super.setComment(NSF_CHARGED);
 				super.withdrawAmount(NONSUFFICIENT_FUNDS_FEE);
-				super.setTransferStatus(false);
+				super.setTransferStatus(false);				
 				break;
 			}
 			super.withdrawAmount(amount);
 			break;
 		case OVER_DRAFT_OPTION_2:
 			if (tempBalance < withdrawLimit) {
+				super.setComment(NSF_CHARGED);
 				super.withdrawAmount(NONSUFFICIENT_FUNDS_FEE);
 				super.setTransferStatus(false);
 				break;
 			} else if (tempBalance >= withdrawLimit && tempBalance < 0) {				
-				super.withdrawAmount(amount + DAILY_OVERDRAFT_FEE); // everytime overdraft is created fee is charged
+				super.withdrawAmount(amount); // everytime overdraft is created fee is charged
+				super.setComment(DAILY_OVERDRAFT_CHARGED);
+				super.withdrawAmount(DAILY_OVERDRAFT_FEE); // everytime overdraft is created fee is charged
 				break;
 			}
 			super.withdrawAmount(amount);
+			
 			break;
 		case OVER_DRAFT_OPTION_3:
 			if (tempBalance < withdrawLimit) {
+				super.setComment(NSF_CHARGED);
 				super.withdrawAmount(NONSUFFICIENT_FUNDS_FEE);
 				super.setTransferStatus(false);
 				break;
@@ -170,60 +205,46 @@ public class Chequeing extends Account implements Runnable {
 		default:
 			break;
 		}	
+		
 	}
 	
 	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
 	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
 	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
-
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
+	
 	@Override
-	public void run() {
-		log20Seconds(); // for daily deductions and logging
-		log60Seconds(); // for monthly deductions and logging
+	protected void log20Seconds(){ // logs day end balance and deducts any overdraft fees	
+		if(super.time() % 20 == 0){
+			deductDailyOverdraft();			
+			super.record("-", super.getNoTransaction(), END_DAY);
+		}
 	}
-	
-	private void timeThread() {
-		System.out.println("Class thread called.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + super.getAccountNumber());
-		this.pay = Executors.newSingleThreadScheduledExecutor();
-		this.pay.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS); // checks every 5 seconds		
-	}
-	
-	private void log20Seconds(){ // logs day end balance and deducts any overdraft fees		
-		long timeMillis = System.currentTimeMillis();
-		long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(timeMillis);
-		if(timeSeconds % 20 == 0){
-//			System.out.println("Daily dedution happened for "+ super.getAccountNumber());
-			deductDailyOverdraft();
+	@Override
+	protected void log60Seconds() { // logs and deducts monthly fee and interest
+		if (super.time() % 60 == 0){
+			deductMonthlyOverdraft();
+			super.record("-", super.getNoTransaction(), END_MONTH);
 		}
 	}
 	
 	private void deductDailyOverdraft() {
 		if (chosenOverdraftOption == OVER_DRAFT_OPTION_2){
 			if(super.getBalance() < 0 && super.getBalance() > this.withdrawLimit){
-				super.withdrawAmount(Chequeing.DAILY_OVERDRAFT_FEE);
-				System.out.println("Daily fee deducted >>>>>>>>>>>>>> $"+Chequeing.DAILY_OVERDRAFT_FEE);
+				super.setComment(DAILY_OVERDRAFT_CHARGED);
+				super.withdrawAmount(Chequeing.DAILY_OVERDRAFT_FEE);				
 			}
 		}
 	}
 	
 	private void deductMonthlyOverdraft() {
 		if (chosenOverdraftOption == OVER_DRAFT_OPTION_3) {
-			super.withdrawAmount(Chequeing.MONTHLY_OVERDRAFT_FEE);
-			System.out.println("Monthly fee deducted >>>>>>>>>>>>>> $"+Chequeing.MONTHLY_OVERDRAFT_FEE);
+			super.setComment(MONTHLY_OVERDRAFT_CHARGED);
+			super.withdrawAmount(Chequeing.MONTHLY_OVERDRAFT_FEE);			
 		}
 	}
 	
-	private void log60Seconds() { // logs and deducts monthly fee and interest
-
-		long timeMillis = System.currentTimeMillis();
-		long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(timeMillis);
-		// System.out.println(timeSeconds % 20);
-		if (timeSeconds % 60 == 0){
-//			System.out.println("Monthly dedution happened for " + super.getAccountNumber());
-			deductMonthlyOverdraft();
-		}
-	}
-	
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
 	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
 	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
 	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
@@ -234,6 +255,7 @@ public class Chequeing extends Account implements Runnable {
 								  "overdraft Limit: "+ super.getLimit() +"\n" +
 								  "withdraw Limit: "+ withdrawLimit+"\n";
 	}
+
 }
 
 
