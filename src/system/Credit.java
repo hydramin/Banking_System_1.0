@@ -1,6 +1,7 @@
 package system;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class Credit extends Account {
 	private static final int CLEPenalty = 25;
@@ -11,7 +12,7 @@ public class Credit extends Account {
 
 	private Credit(int accountNumber) {
 		super(accountNumber);
-		System.out.println("Credit Account Created!");
+//		super.record("-", 0.0, "Chequeing account created");
 	}
 
 	///////////////////////////////////////////////////////////////////////////// Getters
@@ -34,7 +35,7 @@ public static HashMap<Integer, Credit> getAccountList() {
  *
  * @return account of type credit.
  */	
-	public static Credit addAccount(int accountNumber){
+	public static Credit createAccount(int accountNumber){
 			if (!accountList.containsKey(accountNumber)) {
 				accountList.put(accountNumber, new Credit(accountNumber));
 				return accountList.get(accountNumber);
@@ -43,16 +44,23 @@ public static HashMap<Integer, Credit> getAccountList() {
 	}
 		
 	public void cancleAccount(){
-		Credit.getAccountList().remove(super.getAccountNumber());		
+		Credit.getAccountList().remove(super.getAccountNumber());
+		super.record("-", 0.0, String.format("Credit account: %d cancled.", super.getAccountNumber()));
 	}
 	
 
 
-    //////////////////////////  GETTERS  //////////////////////////
+    ////////////////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
 
   
 
-    //////////////////////////  SETTERS  //////////////////////////
+    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
 
     /**
      * @Description: This method sets the limit of the account. This limit is the spending limit.
@@ -62,12 +70,17 @@ public static HashMap<Integer, Credit> getAccountList() {
      */
     @Override
     public void setLimit(int limit) {
+    	Account.setComment(String.format("Credit limit set to $%d", limit));
         super.setLimit(limit);
+        Account.setTransfer(true);
         super.depositAmount(limit);
         CLEpenaltyStatus = (limit > 1000) ? true : false;
     }
 
-    //////////////////////////  OPERATIONS  //////////////////////////
+    ////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
 
  
 
@@ -90,16 +103,19 @@ public static HashMap<Integer, Credit> getAccountList() {
      */
 	@Override
 	public void withdrawAmount(double amount){
+		super.setComment(String.format("$%.2f withdrawn from Acc: %d", amount,super.getAccountNumber()));
 		super.setTransferStatus(true);
 		if ((super.getBalance() - amount) < 0) {
 			super.setTransferStatus(false);
 			if (this.CLEpenaltyStatus) {
 				chargeCLEPenalty();
 				declineWithdrawal();
-			} else
+			} else{
 				declineWithdrawal();
-		} else
+			}
+		} else{
 			super.withdrawAmount(amount);
+		}
 	}
 
     /**
@@ -107,6 +123,7 @@ public static HashMap<Integer, Credit> getAccountList() {
      *
      */
 	private void chargeCLEPenalty(){
+		Account.setComment(String.format("Credit account charged fee. Transaction passed credit limit $%d.", Credit.CLEPenalty));
 		super.withdrawAmount(Credit.CLEPenalty);
 	}
 
@@ -115,7 +132,7 @@ public static HashMap<Integer, Credit> getAccountList() {
      *
      */
 	private void declineWithdrawal(){
-		System.out.println("Withdrawal Declined!");
+		super.record("Withdrawal", super.getNoTransaction(), "Withdrawal Declined!");
 		super.setTransferStatus(false);
 	}
 
@@ -133,9 +150,36 @@ public static HashMap<Integer, Credit> getAccountList() {
      *
      * @return
      */
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> THREAD FUNCTIONS
+
+		
+		@Override
+		protected void log20Seconds(){ // logs day end balance and deducts any overdraft fees	
+			if(super.time() % 20 == 0){
+				super.record("-", super.getNoTransaction(), END_DAY);
+			}
+		}		
+	
+		
+	
+		@Override
+		protected void log60Seconds() { // logs and deducts monthly fee and interest
+
+			if (super.time() % 60 == 0){
+				super.record("-", super.getNoTransaction(), END_MONTH);
+			}
+		}
+		
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
+	//><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><> END END END END
 	@Override
 	public String toString(){
 		String CLEstatusDisplay = (CLEpenaltyStatus) ? "High Credit Limit & CLE penalty" : "Low Credit Limit & No CLE penalty";
 		return super.toString() + "CLE Penalty: "+CLEstatusDisplay +"\n";
 	}
+
+
 }
