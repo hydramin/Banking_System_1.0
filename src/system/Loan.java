@@ -16,6 +16,10 @@ public class Loan extends Account {
 	 *               already exist.
 	 * @param accountNumber
 	 *            unique number of type int to represent loan account.
+	 *
+	 * <dt><b>Precondition:</b><dd> The argument accountNumber must an integer value.
+     * <dt><b>Postcondition:</b><dd> A Demand loan account will be returned; newly created or pre-existing from the list.
+     *
 	 * @return account of type Loan.
 	 */
 	public static Loan addAccount(int accountNumber) {

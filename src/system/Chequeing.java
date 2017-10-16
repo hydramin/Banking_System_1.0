@@ -36,7 +36,7 @@ public class Chequeing extends Account implements Runnable {
 	*
 	* @return Object of type HasMap mapping account numbers with chequeing accounts.
 	*/
-	public static HashMap<Integer, Chequeing> getAccountList() {
+	static HashMap<Integer, Chequeing> getAccountList() {
 		return accountList;
 	}
 
@@ -131,8 +131,8 @@ public class Chequeing extends Account implements Runnable {
      *
      * @param amount value of type double to be withdrawn.
      *
-     * <dt><b>Description:</b><dd> The argument amount must be a real number of type double.
-     * <dt><b>Description:</b><dd> The amount will be withdrawn depending on whether or not
+     * <dt><b>Precondition:</b><dd> The argument amount must be a real number of type double.
+     * <dt><b>Postcondition:</b><dd> The amount will be withdrawn depending on whether or not
      *               the resulting balance goes negative.
      */
 	@Override
