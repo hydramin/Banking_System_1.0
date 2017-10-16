@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Customer {
-
 	private final int securityNumber;
 	private double totalIndebtedness;
 	private Chequeing chequeing;
@@ -28,7 +27,8 @@ public class Customer {
     //////////////////////////  GETTERS  //////////////////////////
 
     /**
-     * @Description: This method returns the HasMap containing the customers.
+     * <dt><b>Description:</b><dd>
+     *     This method returns the HasMap containing the customers.
      *
      * @return Object of type HasMap mapping securityNumber with Customer.
      */
@@ -37,7 +37,8 @@ public class Customer {
     }
 
     /**
-     * @Description: This method returns the chequeing account of a customer.
+     * <dt><b>Description:</b><dd>
+     *     This method returns the chequeing account of a customer.
      *
      * @return  account of type Chequeing.
      */
@@ -46,7 +47,8 @@ public class Customer {
 	}
 
     /**
-     * @Description: This method returns the credit account of a customer.
+     * <dt><b>Description:</b><dd>
+     *     This method returns the credit account of a customer.
      *
      * @return  account of type Credit.
      */
@@ -55,7 +57,8 @@ public class Customer {
 	}
 
     /**
-     * @Description: This method returns the Demand loan account of a customer.
+     * <dt><b>Description:</b><dd>
+     *     This method returns the Demand loan account of a customer.
      *
      * @return  account of type Loan.
      */
@@ -64,8 +67,9 @@ public class Customer {
 	}
 
     /**
-     * @Description: This method returns the total indebtedness of the customer,
-     *              which is a sum of indebtedness across all accounts.
+     * <dt><b>Description:</b><dd>
+     *     This method returns the total indebtedness of the customer,
+     *     which is a sum of indebtedness across all accounts.
      *
      * @return  double value containing total indebtedness.
      */
@@ -76,13 +80,17 @@ public class Customer {
     //////////////////////////  OPERATIONS  //////////////////////////
 
     /**
-     * @Description: This method is the only way to create a new customer. A new security number is passed
+     * <dt><b>Description:</b><dd> This method is the only way to create a new customer. A new security number is passed
      *              as a parameter and if the customer is not in the system, it will be added as a new one.
      *              The new customer is then passed in to the list of customers map(customerList).
      *
      * @param securityNumber: unique identifier for a single customer
+	 *
+	 * <dt><b>Precondition:</b><dd> securityNumber bust be an argument of type int.
      *
-     * @return a new customer if the security number is not already registered in the system
+     * <dt><b>Postcondition:</b><dd> A customer will be returned; newly created or pre-existing from the list.
+     *
+     * @return A new customer if the security number is not already registered in the system
      */
 	public static Customer addCustomer(int securityNumber) {
 		if (!customerList.containsKey(securityNumber))
@@ -91,9 +99,13 @@ public class Customer {
 	}
 
     /**
-     * @Description: This method sets the chequeing account of the customer.
+     * <dt><b>Description:</b><dd> This method sets the chequeing account of the customer.
      *
      * @param account new account of type Chequeing.
+     *
+     * <dt><b>Precondition</b><dd> The parameter account must be or type Chequeing and must not be null.
+     *
+     * <dt><b>Postcondition</b><dd> The account will be set as a chequeing account of the customer.
      */
 	public void addAccount(Chequeing account){
 		this.chequeing = account;
@@ -101,69 +113,76 @@ public class Customer {
 	}
 
     /**
-     * @Description: This method sets the credit account of the customer.
+     * <dt><b>Description:</b><dd> This method sets the credit account of the customer.
      *
      * @param account new account of type Credit.
+     *
+     * <dt><b>Precondition</b><dd> The parameter account must be of type Credit and must not be null.
+     *
+     * <dt><b>Precondition</b><dd> The account will be set as the credit account of the customer.
+     *
      */
 	public void addAccount(Credit account){
 		this.credit = account;
 	}
 
     /**
-     * @Description: This method sets the Demand loan account of the customer.
+     * <dt><b>Description:</b><dd> This method sets the Demand loan account of the customer.
      *
      * @param account new account of type Loan.
+     *
+     * <dt><b>Precondition</b><dd> The parameter account must be of type Loan and mus not be null.
+     *
+     * <dt><b>Precondition</b><dd> The account will be set as the Demand loan account of the customer.
      */
 	public void addAccount(Loan account){
 		this.loan = account;
 	}
 
     /**
-     * @Description: This method is a means of creating a Demand loan account.
+     * <dt><b>Description:</b><dd> This method is a means of creating a Demand loan account.
      *              It creates an account of type Loan and add it to the loan account
      *              list with a unique random account number. The total indebtedness
      *              of the account is then transferred over to the Demand loan account.
      *
      */
 	private void loanAccCreator() {
-
-		if (this.loan == null) {
-			int num = randomAccountNumGenerator();
-			this.loan = Loan.addAccount(num);
-		}
+		if (this.loan == null)
+			this.loan = Loan.addAccount(randomAccountNumGenerator());
 		this.loan.depositAmount(totalIndebtedness);
 		this.totalIndebtedness = 0;
 	}
 
     /**
-     * @Description: This method returns a three digit random number between 100 to 999.
+     * <dt><b>Description:</b><dd> This method returns a three digit random number between 100 to 999.
      *              This number is used as the account number to create a unique Demand loan account.
      *
      * @return  random number of type int.
      */
 	private int randomAccountNumGenerator(){
-		Random random = new Random();
-		return random.nextInt(999) + 100;
+		return new Random().nextInt(999) + 100;
 	}
 
     /**
-     * @Description: This method terminates a specified account.
+     * <dt><b>Description:</b><dd> This method terminates a specified account.
      *              Before termination, this method ensures to take all the
      *              indebtedness of a specified account and add to total indebtedness.
      *
      * @param account is an int representing the type of account to be terminated.
+     *
+     *  <dt><b>Precondition</b><dd> The argument account must be an integer value.
+     *
+     *  <dt><b>Precondition</b><dd> The specified account will be terminated.
      */
 	public void terminateAccount(int account){
 		switch (account) {
 		case 1:
 			if(this.chequeing != null){
-
 				this.chequeing.getPay().shutdown();
 				this.totalIndebtedness = this.getChequeing().indebtednessCalc(); // indebtedness from terminating chequeing account
-			// create loan account and transter the indebtedness as account balance. 
-				
+				// create loan account and transfer the indebtedness as account balance.
+				this.chequeing.record("Terminate", 0.0, this.chequeing.getBalance());
 				Chequeing.getAccountList().remove(this.getChequeing().getAccountNumber());
-
 				this.chequeing = null;
 				System.out.println("Chequeing account Deleted");
 			}
@@ -171,10 +190,9 @@ public class Customer {
 		case 2:
 			if(this.credit != null){
 				this.totalIndebtedness = this.getCredit().indebtednessCalc(); // indebtedness from terminating credit account
-
-//				this.credit.getPay().shutdown();
+				//	this.credit.getPay().shutdown();
+				this.chequeing.record("Terminate", 0.0, 0.0);
 				Credit.getAccountList().remove(this.getCredit().getAccountNumber());
-
 				this.credit = null;				
 				System.out.println("Credit account Deleted");
 			}
@@ -191,7 +209,7 @@ public class Customer {
 	}
 
     /**
-     * @Description: Return the string instance of this Customer
+     * <dt><b>Description:</b><dd> Return the string instance of this Customer
      *
      * @return the account types, null or not
      */

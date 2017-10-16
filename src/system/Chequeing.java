@@ -19,37 +19,45 @@ public class Chequeing extends Account implements Runnable {
 	private static final double DAILY_OVERDRAFT_FEE = 5; // 5 dollars fee
 	private static final double MONTHLY_OVERDRAFT_FEE = 4; // 5 dollars fee	
 	private static HashMap<Integer, Chequeing> accountList= new HashMap<>();
-//	private static final SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
 	private ScheduledExecutorService pay;
 
-	///////////////////////////////////////////////////////////////////////////////////////// CONSTRUCTOR
+    ////////////////////////////// CONSTRUCTOR
 
 	private Chequeing(int accountNumber) {
 		super(accountNumber);
-		chosenOverdraftOption = OVER_DRAFT_OPTION_1; // Default overdraft option is Option 1.		
+		chosenOverdraftOption = OVER_DRAFT_OPTION_1;
 		System.out.println("Chequeing acc created.");	
 		timeThread();
 	}
-	////////////////////////////////////////////////////////////////////////////////////////// GETTERS
+
+    //////////////////////////////////////////  GETTERS  //////////////////////////////////////////
 	/**
-	* @Description: This method returns the HasMap containing the chequeing accounts.
+	* <dt><b>Description:</b><dd> This method returns the HasMap containing the chequeing accounts.
 	*
 	* @return Object of type HasMap mapping account numbers with chequeing accounts.
 	*/
 	public static HashMap<Integer, Chequeing> getAccountList() {
 		return accountList;
 	}
-	
+
+    /**
+     * <dt><b>Description:</b><dd>
+     *
+     * @return
+     */
 	public ScheduledExecutorService getPay() {
 		return pay;
 	}
 
-    ///////////////////////////////////////////////////////////////////////////////////////////SETTERS
+    //////////////////////////////////////////  SETTERS  //////////////////////////////////////////
 
     /**
-     * @Description: 
+     * <dt><b>Description:</b><dd> This method sets the limit of the account.
      *
      * @param limit value of type int representing the spending limit.
+     *
+     * <dt><b>Precondition:</b><dd> The argument limit must be an integer value.
+     * <dt><b>Postcondition:</b><dd> The limit of the account of the customer will be set.
      */
     @Override
     public void setLimit(int limit) {
@@ -57,10 +65,14 @@ public class Chequeing extends Account implements Runnable {
         this.withdrawLimit = - super.getLimit();
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////////// OPERATIONS
+    //////////////////////////////////////////  OPERATIONS  //////////////////////////////////////////
 
     /**
-     * @Description: This method calculates the indebtedness of the account.
+     * <dt><b>Description:</b><dd> This method calculates the indebtedness of the account.
+     *
+     * <dt><b>Precondition:</b><dd>
+     * <dt><b>Postcondition:</b><dd> If the balance is negative, that negative balance is returned as debt.
+     *                          Other wise the debt returned is zero.
      *
      * @return double representing indebtedness.
      */
@@ -70,53 +82,63 @@ public class Chequeing extends Account implements Runnable {
 		return 0.0;
 	}
 
+    /**
+     *
+     */
 	public void cancleAccount(){
 		Chequeing.getAccountList().remove(super.getAccountNumber());		
 	}
 	
-/**
- * @Description: This method is the only way to create a new chequeing account. A new account number is passed
- *              as a parameter and if the account is not in the system, it will be added as a new one.
- *              The new account is then passed in to the list of accounts map(accountList).
- *
- * @param accountNumber value of type int representing the account number.
- *
- * @return account of type Chequeing.
- */	
-	public static Chequeing addAccount(int accountNumber){ // only one account number can be assigned to one customer	
-		if (!accountList.containsKey(accountNumber)) {
+    /**
+     * <dt><b>Description:</b><dd> This method is the only way to create a new chequeing account. A new account number is passed
+     *              as a parameter and if the account is not in the system, it will be added as a new one.
+     *              The new account is then passed in to the list of accounts map(accountList).
+     *
+     * @param accountNumber value of type int representing the account number.
+     *
+     * <dt><b>Precondition:</b><dd> The argument accountNumber must an integer value.
+     * <dt><b>Postcondition:</b><dd> A chequeing account will be returned; newly created or pre-existing from the list.
+     *
+     * @return account of type Chequeing.
+     */
+	public static Chequeing addAccount(int accountNumber){
+		if (!accountList.containsKey(accountNumber))
 			accountList.put(accountNumber, new Chequeing(accountNumber));
-			return accountList.get(accountNumber);
-		}
-		return null;
+        return accountList.get(accountNumber);
 	}
 	
 	/**
-     * @Description: This method is a means of setting the over draft option of the account.
+     * <dt><b>Description:</b><dd> This method is a means of setting the over draft option of the account.
      *
      * @param option value of type int representing the over draft option.
+     *
+     * <dt><b>Precondition:</b><dd> The argument option must be an integer value.
+     * <dt><b>Postcondition:</b><dd> If the option is an integer between and including 1 and 3, the overdraft
+     *               option will be set accordingly.
      */
-	public void setOverdraftOption(int option){ // chequeing
-		
-		if (option < OVER_DRAFT_OPTION_1 || option > OVER_DRAFT_OPTION_3) {
+	public void setOverdraftOption(int option){
+		if (option < OVER_DRAFT_OPTION_1 || option > OVER_DRAFT_OPTION_3)
 			throw new IllegalArgumentException();
-		} 
 		this.chosenOverdraftOption = option;		
 	}
 	
     /**
-     * @Description: This method will withdraw a specified amount and depending
+     * <dt><b>Description:</b><dd> This method will withdraw a specified amount and depending
      *              on whether or not the balance goes negative, fees will be
-     *              charged based on overdraft options.
+     *              charged based on overdraft options. If overdraft option 1 is selected, then
+     *              a negative balance resulting withdrawal would be declined and NSF penalty charged.
+     *              If overdraft 2 is selected,
      *
      * @param amount value of type double to be withdrawn.
+     *
+     * <dt><b>Description:</b><dd> The argument amount must be a real number of type double.
+     * <dt><b>Description:</b><dd> The amount will be withdrawn depending on whether or not
+     *               the resulting balance goes negative.
      */
-	
 	@Override
 	public void withdrawAmount(double amount) {
 		super.setTransferStatus(true);
 		double tempBalance = super.getBalance() - amount;
-
 		switch (chosenOverdraftOption) {
 		case OVER_DRAFT_OPTION_1:
 			if (tempBalance < withdrawLimit) {
@@ -124,7 +146,6 @@ public class Chequeing extends Account implements Runnable {
 				super.setTransferStatus(false);
 				break;
 			}
-
 			super.withdrawAmount(amount);
 			break;
 		case OVER_DRAFT_OPTION_2:

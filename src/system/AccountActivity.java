@@ -2,6 +2,7 @@ package system;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.logging.*;
 
 public class AccountActivity {
 
@@ -37,7 +38,10 @@ public class AccountActivity {
     }
 
     public static void sortAccountLog() {
-
+        for (; ;){
+            for (; ; ){
+            }
+        }
     }
 
     public static void processAccountLogEndOfDay() {
@@ -55,5 +59,4 @@ public class AccountActivity {
     public static void retrieveAccountLog() {
 
     }
-
 }

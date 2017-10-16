@@ -19,10 +19,8 @@ public class Loan extends Account {
 	 * @return account of type Loan.
 	 */
 	public static Loan addAccount(int accountNumber) {
-		if (!accountList.containsKey(accountNumber)) {
+		if (!accountList.containsKey(accountNumber))
 			accountList.put(accountNumber, new Loan(accountNumber));
-			return accountList.get(accountNumber);
-		}
 		return accountList.get(accountNumber);
 	}
 }

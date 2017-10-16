@@ -14,26 +14,43 @@ public class Credit extends Account {
 		System.out.println("Credit Account Created!");
 	}
 
-	///////////////////////////////////////////////////////////////////////////// Getters
-/**
- * @Description: This method returns the HasMap containing the credit accounts.
- *
- * @return Object of type HasMap mapping account numbers with credit accounts.
- */	
-public static HashMap<Integer, Credit> getAccountList() {
-		return accountList;
+	//////////////////////////////////////////  GETTERS  //////////////////////////////////////////
+	/**
+	 * @Description: This method returns the HasMap containing the credit accounts.
+	 *
+	 * @return Object of type HasMap mapping account numbers with credit accounts.
+	 */
+	public static HashMap<Integer, Credit> getAccountList() {
+			return accountList;
+		}
+
+
+    //////////////////////////////////////////  SETTERS  //////////////////////////////////////////
+
+	/**
+	 * @Description: This method sets the limit of the account. This limit is the spending limit.
+	 *              The CLE penalty status can be determined as soon as the credit limit is set.
+	 *
+	 * @param limit value of type int representing the spending limit.
+	 */
+	@Override
+	public void setLimit(int limit) {
+		super.setLimit(limit);
+		super.depositAmount(limit);
+		CLEpenaltyStatus = (limit > 1000) ? true : false;
 	}
-	
-	///////////////////////////////////////////////////////////////////////////// Other Operations
-/**
- * @Description: This method is the only way to create a new credit account. A new account number is passed
- *              as a parameter and if the account is not in the system, it will be added as a new one.
- *              The new account is then passed in to the list of accounts map(accountList).
- *
- * @param accountNumber value of type int representing the account number.
- *
- * @return account of type credit.
- */	
+
+	//////////////////////////////////////////  OPERATIONS  //////////////////////////////////////////
+
+	/**
+	 * @Description: This method is the only way to create a new credit account. A new account number is passed
+	 *              as a parameter and if the account is not in the system, it will be added as a new one.
+	 *              The new account is then passed in to the list of accounts map(accountList).
+	 *
+	 * @param accountNumber value of type int representing the account number.
+	 *
+	 * @return account of type credit.
+	 */
 	public static Credit addAccount(int accountNumber){
 			if (!accountList.containsKey(accountNumber)) {
 				accountList.put(accountNumber, new Credit(accountNumber));
@@ -45,31 +62,6 @@ public static HashMap<Integer, Credit> getAccountList() {
 	public void cancleAccount(){
 		Credit.getAccountList().remove(super.getAccountNumber());		
 	}
-	
-
-
-    //////////////////////////  GETTERS  //////////////////////////
-
-  
-
-    //////////////////////////  SETTERS  //////////////////////////
-
-    /**
-     * @Description: This method sets the limit of the account. This limit is the spending limit.
-     *              The CLE penalty can be determined as soon as the credit limit is set.
-     *
-     * @param limit value of type int representing the spending limit.
-     */
-    @Override
-    public void setLimit(int limit) {
-        super.setLimit(limit);
-        super.depositAmount(limit);
-        CLEpenaltyStatus = (limit > 1000) ? true : false;
-    }
-
-    //////////////////////////  OPERATIONS  //////////////////////////
-
- 
 
     /**
      * @Description: This method calculates the indebtedness of the account.

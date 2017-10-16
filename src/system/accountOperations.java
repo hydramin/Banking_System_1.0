@@ -10,6 +10,5 @@ public interface accountOperations
 	public double getBalance();	 // all	
 	public void setLimit(int limit); // credit and checking
 	public void transferAmount(double amount, Account accountFrom, Account accountTo); // all
-//	public boolean transferStatus(double amount);
 	
 }
