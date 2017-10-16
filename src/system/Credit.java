@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 public class Credit extends Account {
-	private static final int CLEPenalty = 25;
+	private static final int CLEPenalty = 29;
 	private static HashMap<Integer, Credit> accountList = new HashMap<>();
 	private boolean CLEpenaltyStatus;
 

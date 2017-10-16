@@ -33,7 +33,7 @@ public class Chequeing extends Account/* implements Runnable*/ {
 		super(accountNumber);
 		chosenOverdraftOption = OVER_DRAFT_OPTION_1;
 		System.out.println("Chequeing acc created.");	
-		timeThread();
+		//timeThread();
 	}
     /////\/\///////////////////////////////////////////  GETTERS  //////////////////////////////////////////////////// 
     ////\/\/\///////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
@@ -159,7 +159,7 @@ public class Chequeing extends Account/* implements Runnable*/ {
      *
      * @param amount value of type double to be withdrawn.
      *
-     * <dt><b>Precondition:</b><dd> The argument amount must be a real number of type double.
+     * <dt><b>Precondition:</b><dd> The argument amount must be a positive real number of type double.
      * <dt><b>Postcondition:</b><dd> The amount will be withdrawn depending on whether or not
      *               the resulting balance goes negative.
      */

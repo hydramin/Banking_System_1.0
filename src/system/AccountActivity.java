@@ -1,19 +1,20 @@
 package system;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class AccountActivity{
-    private int SIN;					// the social security number of the customer
+    private int SIN;    // the social security number of the customer
     private String transactionType; // either transfer, withdraw or deposit
-    private double balance;			// the balance of the current account after transaction
-    private double transactionAmount; // if transaction approved , how much was withdrawn, transfered or deposited
+    private double balance; // the balance of the current account after transaction
+    private double transactionAmount; // if transaction approved , how much was withdrawn, transferred or deposited
     private Date transactionDate;	// the date of the transaction; for testing purposes date is in seconds or minutes
-    private int accountNumber;		// the account number the transaction occured
+    private int accountNumber;		// the account number the transaction occurred
     private String comment;
-//    private static HashMap<Integer, AccountActivity> accountLog = new HashMap<>();	// HashMap to hold Sin and AccountActivity key
-    private static LogMap<Integer, AccountActivity> accountLog = new LogMap<Integer, AccountActivity>();	// HashMap to hold Sin and AccountActivity key
+   // private static LogMap<Integer, AccountActivity> accountLog = new LogMap<Integer, AccountActivity>();	// HashMap to hold Sin and AccountActivity key
+    private static ArrayList<AccountActivity> accountLog = new ArrayList<>();
     
    
     public AccountActivity(int SIN, int accountNumber, double balance){
@@ -24,24 +25,18 @@ public class AccountActivity{
         this.comment="";        
     }
     
-    
-    /////\/\////////////////////////////////////////////  GETTERS  //////////////////////////////////////////////////// 
-    ////\/\/\///////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
-    ///\/==\/\//////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
-    //\/////\/\/////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
-    
+    ////////////////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
+
+    /**
     public static LogMap<Integer, AccountActivity> getAccountLog() {
 		return accountLog;
-	}
+	}*/
     
     public String getComment() {
 		return comment;
 	}
-    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
 
+    ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
 
     public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
@@ -56,7 +51,8 @@ public class AccountActivity{
     }
 
     public void addToList(){
-        accountLog.put(SIN, this);
+        //accountLog.put(SIN, this);
+        accountLog.add(this);
     }
 
     
@@ -69,8 +65,21 @@ public class AccountActivity{
 
 
     public static void sortAccountLog() {
-        for (; ;){
-            for (; ; ){
+        AccountActivity temp;
+        for (int i = 0; i < accountLog.size(); i++) {
+            for (int j = i; j > 0; j--) {
+                if (accountLog.get(j).SIN < accountLog.get(j-1).SIN) {
+                    temp = accountLog.get(j-1);
+                    accountLog.set(j, accountLog.get(j-1));
+                    accountLog.set(j-1, temp);
+                }
+                else if (accountLog.get(j).SIN == accountLog.get(j-1).SIN) {
+                    if (accountLog.get(j).transactionDate.getTime() > accountLog.get(j-1).transactionDate.getTime()) {
+                        temp = accountLog.get(j-1);
+                        accountLog.set(j, accountLog.get(j-1));
+                        accountLog.set(j-1, temp);
+                    }
+                }
             }
         }
     }

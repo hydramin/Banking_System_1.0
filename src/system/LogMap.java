@@ -48,6 +48,8 @@ public class LogMap<T1, T2> {
 	public LinkedList<T2> entrySet(){
 		return entry;
 	}
-	
-	
+
+	public LinkedList<T1> getKey() {
+		return key;
+	}
 }

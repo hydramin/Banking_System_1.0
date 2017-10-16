@@ -404,8 +404,5 @@ private static void addOrCancle(Customer customer, Credit credit) {
 		
 			System.out.println("");
     	firstPage();
-//			System.out.println(AccountActivity.getAccountLog().size());
-			
-			
     }
 }

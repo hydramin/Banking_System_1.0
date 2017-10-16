@@ -48,7 +48,6 @@ public abstract class Account implements accountOperations, Runnable {
 	 */
 	@Override
 	public double getBalance(){
-        record("Balance", 0.0, this.balance);
 		return this.balance;
 	}
 
@@ -223,9 +222,9 @@ public abstract class Account implements accountOperations, Runnable {
      *                          and resulting balance are key records.
      *
      * @param tranType This is a String value representing the type of transaction. eg; deposit, withdrawal, etc.
-     * @param amount This is a value of type double representing the transaction amount for deposits,
+     * @param tranAmount This is a value of type double representing the transaction amount for deposits,
      *               withdrawals, transfers, and limit.
-     * @param balance This is a value of type double representing the balance after the transaction has occurred.
+     * @param comment This is a value of type string representing the balance after the transaction has occurred.
      *
      * <dt><b>Precondition</b><dd> tranType must be a string value and not empty. amount and balance must be real numbers.
      * <dt><b>Precondition</b><dd> a record of type AccountActivity is created with all the above information.

@@ -14,7 +14,7 @@ public class Customer {
 
     ////////////////////////////// CONSTRUCTOR
 
-	private Customer(int securityNumber) {
+	 Customer(int securityNumber) {
 		this.securityNumber = securityNumber;
 		this.chequeing = null;
 		this.credit = null;
@@ -177,7 +177,7 @@ public class Customer {
      *
      * @param account is an int representing the type of account to be terminated.
      *
-     *  <dt><b>Precondition</b><dd> The argument account must be an integer value.
+     *  <dt><b>Precondition</b><dd> The argument account must be a positive integer value.
      *
      *  <dt><b>Precondition</b><dd> The specified account will be terminated.
      */
@@ -185,12 +185,9 @@ public class Customer {
 		switch (account) {
 		case 1:
 			if(this.chequeing != null){
-				this.chequeing.getPay().shutdown();
-//				this.chequeing.getPay().shutdown();
+				this.chequeing.getPay().shutdown(); //	Shuts down ScheduleExecutionService
 				this.totalIndebtedness = this.getChequeing().indebtednessCalc(); // indebtedness from terminating chequeing account
-				// create loan account and transfer the indebtedness as account balance.
-				this.chequeing.record("Terminate", 0.0, this.chequeing.getBalance());
-				Chequeing.getAccountList().remove(this.getChequeing().getAccountNumber());
+				Chequeing.getAccountList().remove(this.getChequeing().getAccountNumber());	// create loan account and transfer the indebtedness.
 				this.chequeing = null;
 				System.out.println("Chequeing account Deleted");
 			}
@@ -199,7 +196,6 @@ public class Customer {
 			if(this.credit != null){
 				this.totalIndebtedness = this.getCredit().indebtednessCalc(); // indebtedness from terminating credit account
 				//	this.credit.getPay().shutdown();
-				this.chequeing.record("Terminate", 0.0, 0.0);
 				Credit.getAccountList().remove(this.getCredit().getAccountNumber());
 				this.credit = null;				
 				System.out.println("Credit account Deleted");
