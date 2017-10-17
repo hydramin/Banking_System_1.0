@@ -90,7 +90,7 @@ public class Customer {
      *
      * @param securityNumber: unique identifier for a single customer
 	 *
-	 * <dt><b>Precondition:</b><dd> securityNumber bust be an argument of type int.
+	 * <dt><b>Precondition:</b><dd> securityNumber bust be a positive integer argument.
      *
      * <dt><b>Postcondition:</b><dd> A customer will be returned; newly created or pre-existing from the list.
      *

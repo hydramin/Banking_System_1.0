@@ -1,28 +1,33 @@
 package system;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+public class AccountTest {
 
-class AccountTest {
     @Test
-    void getNoTransaction() {
+    public void depositTest() {
+        Chequeing chequeing = Chequeing.createAccount(123);
+        Credit credit = Credit.createAccount(123);
+
+        chequeing.depositAmount((double)1000);
+        double expected = 1000;
+        double actual = chequeing.getBalance();
+
+        assertEquals(expected, actual);
     }
 
     @Test
-    void withdrawAmount() {
-    }
+    public void transferTest(){
+        Chequeing chequeing = Chequeing.createAccount(123);
+        Credit credit = Credit.createAccount(123);
 
-    @Test
-    void depositAmount() {
-    }
+        chequeing.depositAmount(1000.0);
+        chequeing.transferAmount(1000.0, chequeing, credit);
 
-    @Test
-    void transferAmount() {
-    }
+        boolean expected = true;
+        boolean actual = (chequeing.getBalance() == 0.0 && credit.getBalance() == 1000.0);
 
-    @Test
-    void record() {
+        assertEquals(expected, actual);
     }
-
 }
