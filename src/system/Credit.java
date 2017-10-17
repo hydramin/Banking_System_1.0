@@ -3,8 +3,13 @@ package system;
 import java.util.HashMap;
 
 /**
- * 
- * 
+
+ * @author: Amin Adam
+ * @author: Sohrab Oryakhel
+ *
+ * @invariant: balance == limit
+ * @invariant:
+ * @invariant:
  *
  */
 public class Credit extends Account {

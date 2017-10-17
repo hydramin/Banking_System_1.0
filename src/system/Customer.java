@@ -5,8 +5,9 @@ import java.util.Random;
 
 /**
  * 
- * @Description
-     *     Constructor for customer class. It creates a customer instance with null Bank accounts
+ * @Description:  Constructor for customer class. It creates a customer instance with null Bank accounts
+ * @author: Amin Adam
+ * @author: Sohrab Oryakhel
  *
  */
 public class Customer {
