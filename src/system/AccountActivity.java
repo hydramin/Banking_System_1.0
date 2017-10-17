@@ -31,10 +31,7 @@ public class AccountActivity{
     ////////////////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
 
 
-    public static ArrayList<AccountActivity> getAccountLog() {
-		return accountLog;
-	}
-    
+
     public static ArrayList<AccountActivity> getAccountLog() {
 		return accountLog;
 	}
@@ -67,18 +64,38 @@ public class AccountActivity{
         accountLog.add(this);
     }
 
+//    public static void sortAccountLog() {
+//        AccountActivity temp;
+//        for (int i = 0; i < accountLog.size(); i++) {
+//            for (int j = i; j > 0; j--) {
+//                if (accountLog.get(j).SIN < accountLog.get(j-1).SIN) {
+//                    temp = accountLog.get(j-1);
+//                    accountLog.set(j, accountLog.get(j-1));
+//                    accountLog.set(j-1, temp);
+//                }
+//                else if (accountLog.get(j).SIN == accountLog.get(j-1).SIN) {
+//                    if (accountLog.get(j).transactionDate.getTime() > accountLog.get(j-1).transactionDate.getTime()) {
+//                        temp = accountLog.get(j-1);
+//                        accountLog.set(j, accountLog.get(j-1));
+//                        accountLog.set(j-1, temp);
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
     public static void sortAccountLog() {
         AccountActivity temp;
-        for (int i = 0; i < accountLog.size(); i++) {
+        for (int i = 1; i < accountLog.size(); i++) {
             for (int j = i; j > 0; j--) {
                 if (accountLog.get(j).SIN < accountLog.get(j-1).SIN) {
-                    temp = accountLog.get(j-1);
+                    temp = accountLog.get(j);
                     accountLog.set(j, accountLog.get(j-1));
                     accountLog.set(j-1, temp);
                 }
                 else if (accountLog.get(j).SIN == accountLog.get(j-1).SIN) {
-                    if (accountLog.get(j).transactionDate.getTime() > accountLog.get(j-1).transactionDate.getTime()) {
-                        temp = accountLog.get(j-1);
+                    if (accountLog.get(j).transactionDate.getTime() < accountLog.get(j-1).transactionDate.getTime()) {
+                        temp = accountLog.get(j);
                         accountLog.set(j, accountLog.get(j-1));
                         accountLog.set(j-1, temp);
                     }
@@ -111,7 +128,8 @@ public class AccountActivity{
         }
     }
 
-    public static void retrieveAccountLog() {
+    @SuppressWarnings("unchecked")
+	public static void retrieveAccountLog() {
         try {
             FileInputStream fileIn = new FileInputStream("./accountLog.ser");
             ObjectInputStream in = new ObjectInputStream(fileIn);

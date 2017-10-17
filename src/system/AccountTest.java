@@ -6,15 +6,30 @@ import org.junit.Test;
 public class AccountTest {
 
     @Test
-    public void depositTest() {
-        Chequeing chequeing = Chequeing.createAccount(123);
-        Credit credit = Credit.createAccount(123);
+    public void withdrawAmountTest1(){
+        Account chequeing = Chequeing.createAccount(123);
+        chequeing.depositAmount(1000);
+        chequeing.withdrawAmount(500);
 
-        chequeing.depositAmount((double)1000);
+        double expected = 500;
+        double actual = chequeing.getBalance();
+        double delta = 1e-9;
+
+        assertEquals(expected, actual, delta);
+    }
+
+    @Test
+    public void depositTest() {
+        Account chequeing = Chequeing.createAccount(123);
+        Account credit = Credit.createAccount(123);
+
+        chequeing.depositAmount(1000);
+
         double expected = 1000;
         double actual = chequeing.getBalance();
+        double delta = 1e-9;
 
-        assertEquals(expected, actual);
+        assertEquals(expected, actual, delta);
     }
 
     @Test

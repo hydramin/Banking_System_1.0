@@ -7,10 +7,17 @@ public class Loan extends Account {
 
 	private static HashMap<Integer, Loan> accountList = new HashMap<>();
 
+	////////////////////////////// CONSTRUCTOR
+
 	private Loan(int accountNumber) {
 		super(accountNumber);
 //		super.record("-", super.getNoTransaction(), "On Demand Loan account created.");
 	}
+
+	////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
+	////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
+	////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
+	////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
 
 	/**
 	 * @Description: This method is a means of creating a Demand loan account.
@@ -24,7 +31,6 @@ public class Loan extends Account {
      *
 	 * @return account of type Loan.
 	 */
-
 	public static Loan addAccount(int accountNumber) {
 		if (!accountList.containsKey(accountNumber))
 			accountList.put(accountNumber, new Loan(accountNumber));
