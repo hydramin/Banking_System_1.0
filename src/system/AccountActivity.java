@@ -106,7 +106,7 @@ public class AccountActivity{
 
     public static void processAccountLogEndOfDay() throws FileNotFoundException {
         sortAccountLog();
-        saveAccountLog();
+        //saveAccountLog();
     }
 
     public static void processAccountEndOfMonth() throws FileNotFoundException {
