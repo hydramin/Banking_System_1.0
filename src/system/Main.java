@@ -44,7 +44,7 @@ public final class Main {
 				break;
 			case 3:
 				System.out.println("Account log\n"+boundary);				
-				for (AccountActivity a : AccountActivity.getAccountLog().entrySet()) {
+				for (AccountActivity a : AccountActivity.getAccountLog()) {
 					System.out.println(a);
 				}
 				break;
