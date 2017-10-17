@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- * 
- * 
+ * @author: Amin Adam
+ * @author: Sohrab Oryakhel
  *
  */
 public class Customer {

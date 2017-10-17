@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 
  * @author: Amin Adam
- * @author: Sorab O
+ * @author: Sohrab Oryakhel
  * @invariant: 100 >= accountNumber >= 999
  * @invariant: 100000 >=SIN >= 999999
  * @invariant: limit > 0 		

@@ -3,6 +3,15 @@ package system;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+/**
+ *
+ * @author: Amin Adam
+ * @author: Sohrab Oryakhel
+ * @invariant:
+ * @invariant:
+ * @invariant:
+ *
+ */
 public class Loan extends Account {
 
 	private static HashMap<Integer, Loan> accountList = new HashMap<>();

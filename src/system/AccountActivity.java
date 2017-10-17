@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * 
+ * @author: Amin Adam
+ * @author: Sohrab Oryakhel
  * @invariant: 100000 >=SIN >= 999999
  * @invariant: transactionAmount >= 0.0;
  * @invariant: 100 >= accountNumber >= 999
