@@ -1,11 +1,14 @@
 package system;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
+/**
+ * 
+ * @invariant: 1 >= chosenOverdraftOption >= 3
+ * @invariant: withdrawLimit <= 0;
+ *
+ */
 public class Chequeing extends Account/* implements Runnable*/ {
 	//private double overdraftLimit; // set a the overdraft limit
 	private int chosenOverdraftOption;

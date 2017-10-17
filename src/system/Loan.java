@@ -20,7 +20,7 @@ public class Loan extends Account {
 	////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
 
 	/**
-	 * @Description: This method is a means of creating a Demand loan account.
+     * <dt><b>Description:</b><dd> This method is a means of creating a Demand loan account.
 	 *               It creates the account if one with specified number does'nt
 	 *               already exist.
 	 * @param accountNumber

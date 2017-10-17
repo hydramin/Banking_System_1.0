@@ -1,6 +1,7 @@
 package system;
 
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public final class Main {
@@ -231,8 +232,7 @@ public final class Main {
 	//////////////////////////////////////////////////////////////////////////////////////////////////// Pages or UI for software.
 	
 
-	private static void firstPage() {
-
+	private static void firstPage() throws IOException {
 		
 		while (true) {			
 
@@ -477,7 +477,9 @@ public final class Main {
 	}
 	////////////////////////////////////////////////////////////////////////////
 	
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws IOException {
+
         Customer afia = Customer.addCustomer(333333);
 
         Chequeing chequeing3 = Chequeing.createAccount(113);
@@ -521,14 +523,19 @@ public final class Main {
 		
 			System.out.println("");
 			
-//			System.out.println(AccountActivity.getAccountLog());
-//			AccountActivity.sortAccountLog();
-//			
-//			for (AccountActivity a : AccountActivity.getAccountLog()) {
-//				System.out.println(a);
-//				
-//			}
+			System.out.println(AccountActivity.getAccountLog());
+			AccountActivity.sortAccountLog();
+			System.out.println("================================================================");
+			System.out.println(AccountActivity.getAccountLog());
+			AccountActivity.saveAccountLog();
+			AccountActivity.retrieveAccountLog();
+			System.out.println("================================================================");
+			System.out.println(AccountActivity.getAccountLog());
+			for (AccountActivity a : AccountActivity.getAccountLog()) {
+				System.out.println(a.getComment());
+			}
+
 			
-    	firstPage();
+//    	firstPage();
     }
 }

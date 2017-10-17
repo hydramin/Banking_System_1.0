@@ -4,16 +4,25 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 
-
-public class AccountActivity{
-    private int SIN;    // the social security number of the customer
+/**
+ * 
+ * @invariant: 100000 >=SIN >= 999999
+ * @invariant: transactionAmount >= 0.0;
+ * @invariant: 100 >= accountNumber >= 999
+ *
+ */
+public class AccountActivity implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int SIN;    // the social security number of the customer
     private String transactionType; // either transfer, withdraw or deposit
     private double balance; // the balance of the current account after transaction
     private double transactionAmount; // if transaction approved , how much was withdrawn, transferred or deposited
     private Date transactionDate;	// the date of the transaction; for testing purposes date is in seconds or minutes
     private int accountNumber;		// the account number the transaction occurred
     private String comment;
-   // private static LogMap<Integer, AccountActivity> accountLog = new LogMap<Integer, AccountActivity>();	// HashMap to hold Sin and AccountActivity key
     private static ArrayList<AccountActivity> accountLog = new ArrayList<>();
     
    
@@ -31,11 +40,21 @@ public class AccountActivity{
     ////////////////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
 
 
-
+    /**
+     * <dt><b>Description:</b><dd> This method is a getter that returns the account log.
+     *                           Which contains records of type AccountActivity.
+     *
+     * @return an ArrayList of AccountActivities.
+     */
     public static ArrayList<AccountActivity> getAccountLog() {
 		return accountLog;
 	}
-    
+
+    /**
+     * <dt><b>Description:</b><dd> This method returns the comment of this record.
+     *
+     * @return A String value representing the the
+     */
     public String getComment() {
 		return comment;
 	}
@@ -48,23 +67,42 @@ public class AccountActivity{
     ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
     
 
+    /**
+     *
+     * @param transactionType
+     */
     public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
     }
 
+    /**
+     *
+     * @param transactionAmount
+     */
     public void setTransactionAmount(double transactionAmount) {
         this.transactionAmount = transactionAmount;
     }
 
+    /**
+     *
+     * @param comment
+     */
     public void setComment(String comment) {
         this.comment = comment;
     }
 
+    /**
+     *
+     */
     public void addToList(){
         accountLog.add(this);
     }
 
-    
+
+    /**
+     *
+     */
+
     public static void sortAccountLog() {
         AccountActivity temp;
         for (int i = 1; i < accountLog.size(); i++) {
@@ -85,45 +123,63 @@ public class AccountActivity{
         }
     }
 
-    public static void processAccountLogEndOfDay() throws FileNotFoundException {
+    /**
+     *
+     * @throws FileNotFoundException
+     */
+    public static void processAccountLogEndOfDay() throws IOException {
         sortAccountLog();
-        //saveAccountLog();
-    }
-
-    public static void processAccountEndOfMonth() throws FileNotFoundException {
-        sortAccountLog();
-        saveAccountLog();
-    }
-
-    public static void saveAccountLog() throws FileNotFoundException {
         try {
-            FileOutputStream fileOut = new FileOutputStream("./accountLog.ser");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(accountLog);
-            out.close();
-            fileOut.close();
-            System.out.println("Serialized data is stored in ./accountLog.ser");
-        }
-        catch (IOException i){
-            i.printStackTrace();
+            saveAccountLog();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     *
+     * @throws FileNotFoundException
+     */
+    public static void processAccountEndOfMonth() throws IOException {
+        sortAccountLog();
+        try {
+            saveAccountLog();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *
+     * @throws FileNotFoundException
+     */
+    public static void saveAccountLog() throws IOException {
+
+    	FileOutputStream writer = new FileOutputStream("output.ser");
+    	ObjectOutputStream stream = new ObjectOutputStream(writer);
+    	stream.writeObject(accountLog);
+    	stream.close();
+    }
+
+
+	@SuppressWarnings("unchecked")
 	public static void retrieveAccountLog() {
-        try {
-            FileInputStream fileIn = new FileInputStream("./accountLog.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            accountLog = (ArrayList<AccountActivity>) in.readObject();
-            in.close();
-            fileIn.close();
-        }catch(IOException i) {
-            i.printStackTrace();
-        }catch(ClassNotFoundException c) {
-            System.out.println("account logs not found");
-            c.printStackTrace();
-        }
-    }
+		try {
+			FileInputStream input = new FileInputStream("output.ser");
+			ObjectInputStream stream = new ObjectInputStream(input);
+			ArrayList<AccountActivity> temp;
+			temp = (ArrayList<AccountActivity>) stream.readObject();
+			accountLog.addAll(temp);
+			stream.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 
     @Override
     public String toString() {

@@ -4,6 +4,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 
+ * @author: Amin Adam
+ * @author: Sorab O
+ * @invariant: 100 >= accountNumber >= 999
+ * @invariant: 100000 >=SIN >= 999999
+ * @invariant: limit > 0 		
+ *
+ */
 public abstract class Account implements accountOperations, Runnable {
 	 double balance; // the current amount in the account
      int accountNumber; // identification for an account
@@ -30,7 +39,7 @@ public abstract class Account implements accountOperations, Runnable {
 		this.isAccountActive = true;
 		Account.comment = "-";
 		isTransfer = false;
-//		timeThread();
+		timeThread();
 	}
 
     /////\/\///////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////

@@ -2,6 +2,11 @@ package system;
 
 import java.util.HashMap;
 
+/**
+ * 
+ * 
+ *
+ */
 public class Credit extends Account {
 	private static final int CLEPenalty = 29;
 	private static HashMap<Integer, Credit> accountList = new HashMap<>();
@@ -192,6 +197,4 @@ public class Credit extends Account {
 		String CLEstatusDisplay = (CLEpenaltyStatus) ? "High Credit Limit & CLE penalty" : "Low Credit Limit & No CLE penalty";
 		return super.toString() + "CLE Penalty: "+CLEstatusDisplay +"\n";
 	}
-
-
 }

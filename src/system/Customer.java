@@ -3,13 +3,17 @@ package system;
 import java.util.HashMap;
 import java.util.Random;
 
+/**
+ * 
+ * 
+ *
+ */
 public class Customer {
 	private final int securityNumber;
 	private double totalIndebtedness;
 	private Chequeing chequeing;
 	private Credit credit;
 	private Loan loan;
-	private int loanAccNum;
 	private static HashMap<Integer, Customer> customerList = new HashMap<>();
 
     ////////////////////////////// CONSTRUCTOR
@@ -20,7 +24,6 @@ public class Customer {
 		this.credit = null;
 		this.loan = null;
 		this.totalIndebtedness = 0;
-		loanAccNum = 0;
 		System.out.println("Customer Created!");
 	}
 
