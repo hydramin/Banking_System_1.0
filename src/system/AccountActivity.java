@@ -64,25 +64,6 @@ public class AccountActivity{
         accountLog.add(this);
     }
 
-//    public static void sortAccountLog() {
-//        AccountActivity temp;
-//        for (int i = 0; i < accountLog.size(); i++) {
-//            for (int j = i; j > 0; j--) {
-//                if (accountLog.get(j).SIN < accountLog.get(j-1).SIN) {
-//                    temp = accountLog.get(j-1);
-//                    accountLog.set(j, accountLog.get(j-1));
-//                    accountLog.set(j-1, temp);
-//                }
-//                else if (accountLog.get(j).SIN == accountLog.get(j-1).SIN) {
-//                    if (accountLog.get(j).transactionDate.getTime() > accountLog.get(j-1).transactionDate.getTime()) {
-//                        temp = accountLog.get(j-1);
-//                        accountLog.set(j, accountLog.get(j-1));
-//                        accountLog.set(j-1, temp);
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     public static void sortAccountLog() {
         AccountActivity temp;

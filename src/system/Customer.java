@@ -184,22 +184,22 @@ public class Customer {
 	public void terminateAccount(int account){
 		switch (account) {
 		case 1:
-			if(this.chequeing != null){
-				this.chequeing.getPay().shutdown(); //	Shuts down ScheduleExecutionService
-				this.totalIndebtedness = this.getChequeing().indebtednessCalc(); // indebtedness from terminating chequeing account
-				Chequeing.getAccountList().remove(this.getChequeing().getAccountNumber());	// create loan account and transfer the indebtedness.
-				this.chequeing = null;
-				System.out.println("Chequeing account Deleted");
-			}
+			
+//			this.chequeing.getPay().shutdown(); //	Shuts down ScheduleExecutionService
+			this.totalIndebtedness = this.getChequeing().indebtednessCalc(); // indebtedness from terminating chequeing account
+			Chequeing.getAccountList().remove(this.getChequeing().getAccountNumber());	// create loan account and transfer the indebtedness.
+			this.chequeing = null;
+			System.out.println("Chequeing account Deleted");
+			
 			break;
 		case 2:
-			if(this.credit != null){
-				this.totalIndebtedness = this.getCredit().indebtednessCalc(); // indebtedness from terminating credit account
-				//	this.credit.getPay().shutdown();
-				Credit.getAccountList().remove(this.getCredit().getAccountNumber());
-				this.credit = null;				
-				System.out.println("Credit account Deleted");
-			}
+			
+			this.totalIndebtedness = this.getCredit().indebtednessCalc(); // indebtedness from terminating credit account
+			//	this.credit.getPay().shutdown();
+			Credit.getAccountList().remove(this.getCredit().getAccountNumber());
+			this.credit = null;				
+			System.out.println("Credit account Deleted");
+			
 			break;
 		/*case 3:
 			Credit.getCreditAccList().remove(this.getLoan().getAccountNumber());		

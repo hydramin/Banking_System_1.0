@@ -30,6 +30,80 @@ public final class Main {
 		return boundaryValidator(1, 4);
 	}
 	
+	private static int existingCustomerChoice() {
+		System.out.println(boundary);
+		System.out.println("Here is a list of Customers' SIN numbers");
+		
+		int j = 0;
+		for (Integer i : Customer.getCustomerList().keySet()) {
+			System.out.println(++j + ": "+i);
+		}
+		System.out.println(boundary);
+		
+		System.out.println("What would you like to do?");		
+		System.out.println("1. Enter Customer Choice Page.");
+		System.out.println("2. Back.");
+		System.out.println("3. Exit.");
+		return boundaryValidator(1, 3);
+	}
+	
+
+	private static int workOnCusChoice() {
+		System.out.println(boundary);
+		System.out.println("What would you like to do?");
+		System.out.println("0. Customer status");
+		System.out.println("1. Add/Open a Chequeing Account.");
+		System.out.println("2. Add/Open a Credit Account.");
+		System.out.println("3. Transfer money.");
+		System.out.println("4. Terminate an account.");
+		System.out.println("5. Back.");
+		System.out.println("6. Exit");
+		return boundaryValidator(0, 6);
+	}
+	
+	private static int modifyCreditChoice(Credit credit) {
+		
+		System.out.println(boundary);
+		System.out.println("Modify this credit account. Details:");
+		System.out.println(credit.toString());
+		System.out.println(boundary);
+		
+		System.out.println("What would you like to modify?");			
+		System.out.println("1. Change credit limit.");
+		System.out.println("2. Withdraw money.");
+		System.out.println("3. Back");
+		System.out.println("4. Exit");
+		
+		return boundaryValidator(1, 4);
+	}
+	
+	private static int chequeChoice(Chequeing chequeing) {
+		System.out.println("Modify this chequing account. Details:");
+		System.out.println(boundary2);
+		System.out.println(chequeing.toString());
+		System.out.println(boundary2);
+		System.out.println("What would you like to modify?");
+		System.out.println("1. Change overdraft option.");
+		System.out.println("2. Change overdraft limit.");
+		System.out.println("3. Deposit money.");
+		System.out.println("4. Withdraw money.");
+		System.out.println("5. Back");
+		System.out.println("6. Exit");
+		
+		return boundaryValidator(1, 6);
+	}
+		
+	private static void chqOverdraftOptChoice(Chequeing chequeing) {
+		System.out.println("Choose from the overdraft options: ");
+		System.out.println("1.  No Overdraft Protection: with this option, if a withdrawal from the \n"
+						+ "  checking account would cause the balance to be less than 0, then the withdrawal will \n"
+						+ "  be declined, and a Non-Sufficient Funds (NSF) penalty will be charged.\n");
+		System.out.println("2.  Pay Per Use Overdraft Protection. 5$ for creating overdraft or increasing overdraft balance.\n");
+		System.out.println("3.  Monthly Fixed Fee Overdraft Protection. 4$ a month fixed\n");				
+		int choose = boundaryValidator(1, 3);		
+		chequeing.setOverdraftOption(choose); // choose is only between 1,3 ensured		
+	}
+	
 	private static int sinValidator(){
 		int sinNumber = Main.choice.nextInt();
 		while(sinNumber <100000 && sinNumber > 999999){
@@ -56,37 +130,7 @@ public final class Main {
 		}
 		return accNum;
 	}
-	
-	private static int existingCustomerChoice() {
-		System.out.println(boundary);
-		System.out.println("Here is a list of Customers' SIN numbers");
 		
-		int j = 0;
-		for (Integer i : Customer.getCustomerList().keySet()) {
-			System.out.println(++j + ": "+i);
-		}
-		System.out.println(boundary);
-		
-		System.out.println("What would you like to do?");		
-		System.out.println("1. Enter Customer Choice Page.");
-		System.out.println("2. Back.");
-		System.out.println("3. Exit.");
-		return boundaryValidator(1, 3);
-	}
-	
-	private static int workOnCusChoice() {
-		System.out.println(boundary);
-		System.out.println("What would you like to do?");
-		System.out.println("0. Customer status");
-		System.out.println("1. Add/Open a Chequeing Account.");
-		System.out.println("2. Add/Open a Credit Account.");
-		System.out.println("3. Transfer money.");
-		System.out.println("4. Terminate an account.");
-		System.out.println("5. Back.");
-		System.out.println("6. Exit");
-		return boundaryValidator(0, 6);
-	}
-	
 	private static void chequeingCreator(Customer customer) { // customer is ensured not null
 		System.out.println("Enter account number for the chequing account.");
 		Chequeing chequeing = Chequeing.createAccount(accNumValidator());
@@ -150,6 +194,18 @@ public final class Main {
 		return money;
 	}
 	
+	private static int creditLimitValidator(int from,int to){
+		
+		System.out.println(String.format("Enter a new value for the Credit limit between $%d and $%d.", from, to));
+		int limit = Main.choice.nextInt();
+		while (limit < from && limit > to) {
+			System.out.println(String.format("Please enter value between between $%d and $%d.", from, to));
+			limit = Main.choice.nextInt();
+		}
+		return limit;
+	}
+		
+	
 	private static void terminator(Customer customer) {
 		System.out.println("Choose an account to terminate.");
 		System.out.println("1. Chequeing account");
@@ -164,23 +220,7 @@ public final class Main {
 			System.out.println("Account does not exist. No account terminated.");
 		}	
 	}
-	
-	private static int modifyCreditChoice(Credit credit) {
 		
-		System.out.println(boundary);
-		System.out.println("Modify this credit account. Details:");
-		System.out.println(credit.toString());
-		System.out.println(boundary);
-		
-		System.out.println("What would you like to modify?");			
-		System.out.println("1. Change credit limit.");
-		System.out.println("2. Withdraw money.");
-		System.out.println("3. Back");
-		System.out.println("4. Exit");
-		
-		return boundaryValidator(1, 4);
-	}
-	
 	private static void exitSystem(){
 		//print the logs to file. Call save account log
 	}
@@ -367,17 +407,7 @@ public final class Main {
 		}
 	}
 
-	private static int creditLimitValidator(int from,int to){
-		
-		System.out.println(String.format("Enter a new value for the Credit limit between $%d and $%d.", from, to));
-		int limit = Main.choice.nextInt();
-		while (limit < from && limit > to) {
-			System.out.println(String.format("Please enter value between between $%d and $%d.", from, to));
-			limit = Main.choice.nextInt();
-		}
-		return limit;
-	}
-		
+	
 	private static void modifyCredit(Credit credit) {
 		while (!back) {
 			
@@ -407,34 +437,7 @@ public final class Main {
 		}
 		Main.back = false;
 	}
-	
-	private static int chequeChoice(Chequeing chequeing) {
-		System.out.println("Modify this chequing account. Details:");
-		System.out.println(boundary2);
-		System.out.println(chequeing.toString());
-		System.out.println(boundary2);
-		System.out.println("What would you like to modify?");
-		System.out.println("1. Change overdraft option.");
-		System.out.println("2. Change overdraft limit.");
-		System.out.println("3. Deposit money.");
-		System.out.println("4. Withdraw money.");
-		System.out.println("5. Back");
-		System.out.println("6. Exit");
 		
-		return boundaryValidator(1, 6);
-	}
-	
-	private static void chqOverdraftOptChoice(Chequeing chequeing) {
-		System.out.println("Choose from the overdraft options: ");
-		System.out.println("1.  No Overdraft Protection: with this option, if a withdrawal from the \n"
-						+ "  checking account would cause the balance to be less than 0, then the withdrawal will \n"
-						+ "  be declined, and a Non-Sufficient Funds (NSF) penalty will be charged.\n");
-		System.out.println("2.  Pay Per Use Overdraft Protection. 5$ for creating overdraft or increasing overdraft balance.\n");
-		System.out.println("3.  Monthly Fixed Fee Overdraft Protection. 4$ a month fixed\n");				
-		int choose = boundaryValidator(1, 3);		
-		chequeing.setOverdraftOption(choose); // choose is only between 1,3 ensured		
-	}
-	
 	private static void modifyChequeing(Chequeing chequeing) {
 		while(!back){
 			
@@ -518,14 +521,14 @@ public final class Main {
 		
 			System.out.println("");
 			
-			System.out.println(AccountActivity.getAccountLog());
-			AccountActivity.sortAccountLog();
+//			System.out.println(AccountActivity.getAccountLog());
+//			AccountActivity.sortAccountLog();
+//			
+//			for (AccountActivity a : AccountActivity.getAccountLog()) {
+//				System.out.println(a);
+//				
+//			}
 			
-			for (AccountActivity a : AccountActivity.getAccountLog()) {
-				System.out.println(a);
-				
-			}
-			
-//    	firstPage();
+    	firstPage();
     }
 }
