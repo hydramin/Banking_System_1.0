@@ -93,7 +93,16 @@ public class AccountActivity{
     }
 
     /**
+     * <dt><b>Description:</b><dd> This method sorts the account logs by SIN then by time.
+     *                          This is a simple insertion sort algorithm which contains elements
+     *                          of type AccountActivity which are records. Each record has a SIN
+     *                          which is used in comparison and if the SINs are the same then date
+     *                          is used to sort.
      *
+     * <dt><b>Loop Invariant:</b><dd> At each step, accountLog<1..j-1> contains the first j-1 elements in SORTED order.
+     *
+     * <dt><b>Precondition:</b><dd> The accountLog must not be empty.
+     * <dt><b>Postcondition:</b><dd> The accountLog will be sorted
      */
     public static void sortAccountLog() {
         AccountActivity temp;
@@ -116,6 +125,7 @@ public class AccountActivity{
     }
 
     /**
+     * <dt><b>Description:</b><dd> This method sorts the accountLog and outputs it to a file at the end of day.
      *
      * @throws FileNotFoundException
      */
@@ -129,6 +139,7 @@ public class AccountActivity{
     }
 
     /**
+     * <dt><b>Description:</b><dd> This method sorts the accountLog and outputs it to a file at the end of month.
      *
      * @throws FileNotFoundException
      */
@@ -142,6 +153,7 @@ public class AccountActivity{
     }
 
     /**
+     *<dt><b>Description:</b><dd> This method creates a text file and writes to it the records in account log.
      *
      * @throws FileNotFoundException
      */
@@ -154,11 +166,11 @@ public class AccountActivity{
     }
 
     /**
-     *
+     *<dt><b>Description:</b><dd> This method retrieves a previously saved accountLog from a file.
      */
 	public static void retrieveAccountLog() {
         try {
-            FileInputStream fileIn = new FileInputStream("./accountLog.ser");
+            FileInputStream fileIn = new FileInputStream("output.txt");
             ObjectInputStream in = new ObjectInputStream(fileIn);
             accountLog = (ArrayList<AccountActivity>) in.readObject();
             in.close();
