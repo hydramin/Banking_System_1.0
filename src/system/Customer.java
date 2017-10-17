@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- * 
- * @Description:  Constructor for customer class. It creates a customer instance with null Bank accounts
  * @author: Amin Adam
  * @author: Sohrab Oryakhel
- *
+ * 
  */
 public class Customer {
 	private final int securityNumber;
@@ -19,7 +17,12 @@ public class Customer {
 	private static HashMap<Integer, Customer> customerList = new HashMap<>();
 
     ////////////////////////////// CONSTRUCTOR
-
+/**
+ * @Description:  Constructor for customer class. It creates a customer instance with null Bank accounts
+ * @param securityNumber
+ * @Precondition: security number (SIN) must be integer between 100000 and 999999
+ * @Postcondition: instantiates a new unique Custumer object 
+ */
 	 Customer(int securityNumber) {
 		this.securityNumber = securityNumber;
 		this.chequeing = null;
@@ -32,9 +35,8 @@ public class Customer {
     //////////////////////////  GETTERS  //////////////////////////
 
     /**
-     * @Description
-     *     This method returns the HasMap containing the customers.
-     *
+     * @Description: This method returns the HasMap containing the customers.
+     * 
      * @return Object of type HasMap mapping securityNumber with Customer.
      */
     public static HashMap<Integer, Customer> getCustomerList() {
@@ -97,7 +99,7 @@ public class Customer {
 	 *
 	 * @Precondition: securityNumber bust be a positive integer argument.
      *
-     * <dt><b>Postcondition:</b><dd> A customer will be returned; newly created or pre-existing from the list.
+     * @Postcondition: A customer will be returned; newly created or pre-existing from the list.
      *
      * @return A new customer if the security number is not already registered in the system
      */
@@ -112,7 +114,7 @@ public class Customer {
      *
      * @param account new account of type Chequeing.
      *
-     * <dt><b>Precondition</b><dd> The parameter account must be or type Chequeing and must not be null.
+     * @Precondition: The parameter account must be or type Chequeing and must not be null.
      *
      * <dt><b>Postcondition</b><dd> The account will be set as a chequeing account of the customer and passes the Customer's SIN to it.
      */
@@ -126,9 +128,9 @@ public class Customer {
      *
      * @param account new account of type Credit.
      *
-     * <dt><b>Precondition</b><dd> The parameter account must be of type Credit and must not be null.
+     * @Precondition: The parameter account must be of type Credit and must not be null.
      *
-     * <dt><b>Precondition</b><dd> The account will be set as the credit account of the customer and passes the Customer's SIN to it..
+     * @Precondition: The account will be set as the credit account of the customer and passes the Customer's SIN to it..
      *
      */
 	public void addAccount(Credit account){
@@ -141,9 +143,9 @@ public class Customer {
      *
      * @param account new account of type Loan.
      *
-     * <dt><b>Precondition</b><dd> The parameter account must be of type Loan and must not be null.
+     * @Precondition: The parameter account must be of type Loan and must not be null.
      *
-     * <dt><b>Precondition</b><dd> The account will be set as the Demand loan account of the customer  and passes the Customer's SIN to it..
+     * @Precondition: The account will be set as the Demand loan account of the customer  and passes the Customer's SIN to it..
      */
 	public void addAccount(Loan account){
 		this.loan = account;
@@ -155,9 +157,9 @@ public class Customer {
      *              It creates an account of type Loan and add it to the loan account
      *              list with a unique random account number. The total indebtedness
      *              of the account is then transferred over to the Demand loan account.
-     * <dt><b>Precondition</b><dd> The customer's indebtedness must be positive.
+     * @Precondition: The customer's indebtedness must be positive.
      *
-     * <dt><b>Precondition</b><dd> It creates a Loan account or deposits new indebtedness into  the loan account upon termination of an account with debt          
+     * @Precondition: It creates a Loan account or deposits new indebtedness into  the loan account upon termination of an account with debt          
      *
      */
 	private void loanAccCreator() {
@@ -185,9 +187,9 @@ public class Customer {
      *
      * @param account is an int representing the type of account to be terminated.
      *
-     *  <dt><b>Precondition</b><dd> The argument account must be a positive integer value.
+     *  @Precondition: The argument account must be a positive integer value.
      *
-     *  <dt><b>Precondition</b><dd> The specified account will be terminated.
+     *  @Postcondition: The specified account will be terminated.
      */
 	public void terminateAccount(int account){
 		switch (account) {
@@ -219,7 +221,7 @@ public class Customer {
 	}
 
     /**
-     * @Description Return the string instance of this Customer
+     * @Description Return the string representation of the customer object
      *
      * @return the account types, null or not
      */

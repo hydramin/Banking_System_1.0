@@ -18,7 +18,10 @@ public final class Main {
 	//////////////////////////////////////////////////////////////////////////////////////////////////// Choices and Validators
 	//////////////////////////////////////////////////////////////////////////////////////////////////// Choices and Validators
 	//////////////////////////////////////////////////////////////////////////////////////////////////// Choices and Validators
-	
+	/**
+	 * @Description: it presents the options for the first UI page and ensures only 1 to 4 is selected
+	 * @return: returns an int value of 1 to 4
+	 */
 	private static int firstPageChoice(){
 		System.out.println(boundary);
 		System.out.println("Home Screen");
@@ -31,6 +34,10 @@ public final class Main {
 		return boundaryValidator(1, 4);
 	}
 	
+	/**
+	 * @Description: Shows the SIN number of available customers
+	 * @return: returns the chosen int only from 1 to 3
+	 */
 	private static int existingCustomerChoice() {
 		System.out.println(boundary);
 		System.out.println("Here is a list of Customers' SIN numbers");
@@ -48,7 +55,10 @@ public final class Main {
 		return boundaryValidator(1, 3);
 	}
 	
-
+/**
+ * @Description: Gives options for what to do to a customer account
+ * @return: returns option ints from 0 to 6
+ */
 	private static int workOnCusChoice() {
 		System.out.println(boundary);
 		System.out.println("What would you like to do?");
@@ -62,6 +72,12 @@ public final class Main {
 		return boundaryValidator(0, 6);
 	}
 	
+	/**
+	 * @Description: Displays the chosen credit accound and gives options on what to do to it
+	 * @param credit
+	 * @return returns the chosen int from 1 to 4
+	 * @Precondition: credit must not be null 
+	 */
 	private static int modifyCreditChoice(Credit credit) {
 		
 		System.out.println(boundary);
@@ -78,6 +94,11 @@ public final class Main {
 		return boundaryValidator(1, 4);
 	}
 	
+	/**
+	 * @Description: Displays the chosen chequeing account and gives option on how to affect it
+	 * @param chequeing
+	 * @return: returns the chosen option only from 1 to 6
+	 */
 	private static int chequeChoice(Chequeing chequeing) {
 		System.out.println("Modify this chequing account. Details:");
 		System.out.println(boundary2);
@@ -93,7 +114,13 @@ public final class Main {
 		
 		return boundaryValidator(1, 6);
 	}
-		
+	
+	/**
+	 * @Description: Gives option for changing overdraft option
+	 * @param chequeing
+	 * @Precondition: chequeing must not be null
+	 * @Postcondition: assigns the chosen option to the chosen chequing
+	 */
 	private static void chqOverdraftOptChoice(Chequeing chequeing) {
 		System.out.println("Choose from the overdraft options: ");
 		System.out.println("1.  No Overdraft Protection: with this option, if a withdrawal from the \n"
@@ -105,6 +132,10 @@ public final class Main {
 		chequeing.setOverdraftOption(choose); // choose is only between 1,3 ensured		
 	}
 	
+	/**
+	 * @Description: ensures the sin number passed by user is between 100000 and 999999
+	 * @return sin nubmber between 100000 and 999999
+	 */
 	private static int sinValidator(){
 		int sinNumber = Main.choice.nextInt();
 		while(sinNumber <100000 && sinNumber > 999999){
@@ -114,6 +145,12 @@ public final class Main {
 		return sinNumber;
 	}
 	
+	/**
+	 * @Description: allows the user to choose an int between from and to variables
+	 * @param from
+	 * @param to
+	 * @return returns an int in between from and to
+	 */
 	private static int boundaryValidator(int from, int to) { // used for the choices
 		int x = Main.choice.nextInt();
 		while(x <from && x > to){
@@ -123,6 +160,10 @@ public final class Main {
 		return x;
 	}
 	
+	/**
+	 * @Description: Ensures the account number is a 3 digit number between 100 and 999
+	 * @return: returns an the user entered int between 100 and 999
+	 */
 	private static int accNumValidator(){ // must be 3 digit number
 		int accNum = Main.choice.nextInt();
 		while(accNum <100 && accNum > 999){
@@ -131,7 +172,13 @@ public final class Main {
 		}
 		return accNum;
 	}
-		
+	
+	/**
+	 * @Description: It creates a chequeing account and passes the customer's sin into it and modifies the account and gives option to add or cancle it
+	 * @param customer
+	 * @Precondition: customer must not be null
+	 * @Postconditon: customer will have a chequeing account it it had none
+	 */
 	private static void chequeingCreator(Customer customer) { // customer is ensured not null
 		System.out.println("Enter account number for the chequing account.");
 		Chequeing chequeing = Chequeing.createAccount(accNumValidator());
@@ -145,6 +192,12 @@ public final class Main {
 		Main.addOrCancle(customer, chequeing); // both not null		
 	}
 
+	/**
+	 * @Description: creates a credit account and assigns it into the chosen customer object, allows modification and choice to add or cancel
+	 * @param customer
+	 * @Precondition: customer must not be null
+	 * @Postconditon: customer will have a credit account it it had none
+	 */
 	private static void creditCreator(Customer customer){
 		System.out.println("Enter account number for the credit account.");
 		Credit credit = Credit.createAccount(accNumValidator());
@@ -158,6 +211,12 @@ public final class Main {
 		Main.addOrCancle(customer, credit);
 	}
 	
+	/**
+	 * @Description: Gives option to transfer some amount of money from chequing to credit or back 
+	 * @param customer
+	 * @Precondition: customer must have both accounts
+	 * @Postcondition: requests transfer from one to the other account
+	 */
 	private static void transferMoney(Customer customer) {
 		System.out.println(boundary2);
 		System.out.println("1. Transfer money from Chequeing to Credit.");
@@ -186,6 +245,10 @@ public final class Main {
 		}
 	}
 	
+	/**
+	 * @Description: Ensures that the money amount entered is always positive
+	 * @return a positive double amount
+	 */
 	private static double moneyValidator() { // returns always a + value
 		int money = Main.choice.nextInt();
 		while(money < 0){
@@ -195,6 +258,13 @@ public final class Main {
 		return money;
 	}
 	
+	/**
+	 * 
+	 * @Description: Ensures the credit limit entered by user is between from and to
+	 * @param from
+	 * @param to
+	 * @return returns a valid limit between from and to
+	 */
 	private static int creditLimitValidator(int from,int to){
 		
 		System.out.println(String.format("Enter a new value for the Credit limit between $%d and $%d.", from, to));
@@ -206,7 +276,12 @@ public final class Main {
 		return limit;
 	}
 		
-	
+	/**
+	 * @Description: Gives the option to terminate an account
+	 * @param customer
+	 * @Precondition: customer must have the account to be terminated
+	 * @Postcondition: a request for termination will be sent
+	 */
 	private static void terminator(Customer customer) {
 		System.out.println("Choose an account to terminate.");
 		System.out.println("1. Chequeing account");
@@ -221,15 +296,16 @@ public final class Main {
 			System.out.println("Account does not exist. No account terminated.");
 		}	
 	}
-		
+		/**
+		 * @Description: Allows the system to exit and record the logs to file
+		 */
 	private static void exitSystem(){
 		try {
 			AccountActivity.saveAccountLog();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		exitSystem();
+		System.exit(0);
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////// Pages or UI for software.
@@ -237,8 +313,11 @@ public final class Main {
 	//////////////////////////////////////////////////////////////////////////////////////////////////// Pages or UI for software.
 	//////////////////////////////////////////////////////////////////////////////////////////////////// Pages or UI for software.
 
+	/**
+	 * @Description: this is the first page of the UI interface and it processes the choices made by the user
+	 */
 	private static void firstPage() {
-		
+		AccountActivity.retrieveAccountLog();
 		while (true) {			
 
 			switch (Main.firstPageChoice()) {
@@ -276,6 +355,9 @@ public final class Main {
 		}
 	}
 	
+	/**
+	 * @Description: the page where existing customers will be listed
+	 */
 	private static void existingCustomers(){
 		
 		while (!Main.back) {
@@ -307,6 +389,10 @@ public final class Main {
 		Main.back = false;
 	}
 	
+	/**
+	 * @Description: A page where a chosen customer's status and actions with in the customer are presented
+	 * @param customer
+	 */
 	private static void workOnCustomer(Customer customer) { // customer will never be null, ensured by callers above.
 		
 		while (!back) {				
@@ -362,6 +448,11 @@ public final class Main {
 		Main.back = false;	
 	}
 	
+	/**
+	 * @Description: A choice page for adding or canceling a created chequeing account before it is added
+	 * @param customer
+	 * @param chequeing
+	 */
 	private static void addOrCancle(Customer customer, Chequeing chequeing) {
 		
 		System.out.println("Would you like to add this account?");
@@ -387,6 +478,11 @@ public final class Main {
 		}
 	}
 	
+	/**
+	 * @Description: A page where a credit account is added or cancled into the customer's accounts
+	 * @param customer
+	 * @param credit
+	 */
 	private static void addOrCancle(Customer customer, Credit credit) {
 		
 		System.out.println("Would you like to add this account?");
@@ -412,7 +508,10 @@ public final class Main {
 		}
 	}
 
-	
+	/**
+	 * A page where options chosen to modify the credit account are processed
+	 * @param credit
+	 */
 	private static void modifyCredit(Credit credit) {
 		while (!back) {
 			
@@ -442,7 +541,10 @@ public final class Main {
 		}
 		Main.back = false;
 	}
-		
+	/**
+	 * @Description: A page where chequeing accounts are modified
+	 * @param chequeing
+	 */
 	private static void modifyChequeing(Chequeing chequeing) {
 		while(!back){
 			
@@ -542,6 +644,6 @@ public final class Main {
 			}
 
 			
-//    	firstPage();
+    	firstPage();
     }
 }
