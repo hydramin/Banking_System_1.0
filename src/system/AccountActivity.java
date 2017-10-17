@@ -146,18 +146,6 @@ public class AccountActivity{
      * @throws FileNotFoundException
      */
     public static void saveAccountLog() throws IOException {
-//        try {
-//            FileOutputStream fileOut = new FileOutputStream("./accountLog.ser");
-//            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-//            out.writeObject(accountLog);
-//            out.close();
-//            fileOut.close();
-//            System.out.println("Serialized data is stored in ./accountLog.ser");
-//        }
-//        catch (IOException i){
-//            i.printStackTrace();
-//        }
-
         FileWriter writer = new FileWriter("output.txt");
         for(AccountActivity a : accountLog) {
             writer.write(a.toString());

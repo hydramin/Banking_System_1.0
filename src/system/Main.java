@@ -1,14 +1,11 @@
 package system;
 
-<<<<<<< HEAD
+import java.io.IOException;
 //import java.text.SimpleDateFormat;
 //import java.util.Calendar;
 //import java.util.Date;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-=======
-
->>>>>>> refs/remotes/origin/master
 import java.util.Scanner;
 
 public final class Main {
@@ -197,15 +194,8 @@ public final class Main {
 	//////////////////////////////////////////////////////////////////////////////////////////////////// Pages or UI for software.
 	//////////////////////////////////////////////////////////////////////////////////////////////////// Pages or UI for software.
 	//////////////////////////////////////////////////////////////////////////////////////////////////// Pages or UI for software.
-	
-<<<<<<< HEAD
-	//////////////////////////////////////////////////////////////////////////// methods
+
 	private static void firstPage() throws IOException {
-=======
-
-	private static void firstPage() {
-
->>>>>>> refs/remotes/origin/master
 		
 		while (true) {			
 
@@ -486,12 +476,8 @@ public final class Main {
 		Main.back = false;
 	}
 	////////////////////////////////////////////////////////////////////////////
-	
-<<<<<<< HEAD
+
     public static void main(String[] args) throws IOException {
-=======
-    public static void main(String[] args) {
->>>>>>> refs/remotes/origin/master
         Customer afia = Customer.addCustomer(333333);
 
         Chequeing chequeing3 = Chequeing.createAccount(113);
