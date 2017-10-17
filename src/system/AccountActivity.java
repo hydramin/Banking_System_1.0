@@ -100,7 +100,16 @@ public class AccountActivity implements Serializable{
 
 
     /**
+     * <dt><b>Description:</b><dd> This method sorts the account logs by SIN then by time.
+     *                          This is a simple insertion sort algorithm which contains elements
+     *                          of type AccountActivity which are records. Each record has a SIN
+     *                          which is used in comparison and if the SINs are the same then date
+     *                          is used to sort.
      *
+     * <dt><b>Loop Invariant:</b><dd> At each step, accountLog<1..j-1> contains the first j-1 elements in SORTED order.
+     *
+     * <dt><b>Precondition:</b><dd> The accountLog must not be empty.
+     * <dt><b>Postcondition:</b><dd> The accountLog will be sorted
      */
 
     public static void sortAccountLog() {
@@ -124,6 +133,7 @@ public class AccountActivity implements Serializable{
     }
 
     /**
+     * <dt><b>Description:</b><dd> This method sorts the accountLog and outputs it to a file at the end of day.
      *
      * @throws FileNotFoundException
      */
@@ -137,6 +147,7 @@ public class AccountActivity implements Serializable{
     }
 
     /**
+     * <dt><b>Description:</b><dd> This method sorts the accountLog and outputs it to a file at the end of month.
      *
      * @throws FileNotFoundException
      */
@@ -150,6 +161,7 @@ public class AccountActivity implements Serializable{
     }
 
     /**
+     *<dt><b>Description:</b><dd> This method creates a text file and writes to it the records in account log.
      *
      * @throws FileNotFoundException
      */
@@ -179,7 +191,6 @@ public class AccountActivity implements Serializable{
 			e.printStackTrace();
 		}
 	}
-
 
     @Override
     public String toString() {
