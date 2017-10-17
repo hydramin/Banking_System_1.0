@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.io.FileWriter;
 
 public class AccountActivity{
     private int SIN;    // the social security number of the customer
@@ -28,11 +29,21 @@ public class AccountActivity{
     
     ////////////////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
 
-
+    /**
+     * <dt><b>Description:</b><dd> This method is a getter that returns the account log.
+     *                           Which contains records of type AccountActivity.
+     *
+     * @return an ArrayList of AccountActivities.
+     */
     public static ArrayList<AccountActivity> getAccountLog() {
 		return accountLog;
 	}
-    
+
+    /**
+     * <dt><b>Description:</b><dd> This method returns the comment of this record.
+     *
+     * @return A String value representing the the
+     */
     public String getComment() {
 		return comment;
 	}
@@ -41,22 +52,40 @@ public class AccountActivity{
 
     ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
 
+    /**
+     *
+     * @param transactionType
+     */
     public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
     }
 
+    /**
+     *
+     * @param transactionAmount
+     */
     public void setTransactionAmount(double transactionAmount) {
         this.transactionAmount = transactionAmount;
     }
 
+    /**
+     *
+     * @param comment
+     */
     public void setComment(String comment) {
         this.comment = comment;
     }
 
+    /**
+     *
+     */
     public void addToList(){
         accountLog.add(this);
     }
 
+    /**
+     *
+     */
     public static void sortAccountLog() {
         AccountActivity temp;
         for (int i = 1; i < accountLog.size(); i++) {
@@ -77,30 +106,59 @@ public class AccountActivity{
         }
     }
 
-    public static void processAccountLogEndOfDay() throws FileNotFoundException {
+    /**
+     *
+     * @throws FileNotFoundException
+     */
+    public static void processAccountLogEndOfDay() throws IOException {
         sortAccountLog();
-        //saveAccountLog();
-    }
-
-    public static void processAccountEndOfMonth() throws FileNotFoundException {
-        sortAccountLog();
-        saveAccountLog();
-    }
-
-    public static void saveAccountLog() throws FileNotFoundException {
         try {
-            FileOutputStream fileOut = new FileOutputStream("./accountLog.ser");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(accountLog);
-            out.close();
-            fileOut.close();
-            System.out.println("Serialized data is stored in ./accountLog.ser");
-        }
-        catch (IOException i){
-            i.printStackTrace();
+            saveAccountLog();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    /**
+     *
+     * @throws FileNotFoundException
+     */
+    public static void processAccountEndOfMonth() throws IOException {
+        sortAccountLog();
+        try {
+            saveAccountLog();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *
+     * @throws FileNotFoundException
+     */
+    public static void saveAccountLog() throws IOException {
+//        try {
+//            FileOutputStream fileOut = new FileOutputStream("./accountLog.ser");
+//            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+//            out.writeObject(accountLog);
+//            out.close();
+//            fileOut.close();
+//            System.out.println("Serialized data is stored in ./accountLog.ser");
+//        }
+//        catch (IOException i){
+//            i.printStackTrace();
+//        }
+
+        FileWriter writer = new FileWriter("output.txt");
+        for(AccountActivity a : accountLog) {
+            writer.write(a.toString());
+        }
+        writer.close();
+    }
+
+    /**
+     *
+     */
     public static void retrieveAccountLog() {
         try {
             FileInputStream fileIn = new FileInputStream("./accountLog.ser");

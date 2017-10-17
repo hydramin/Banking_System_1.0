@@ -30,7 +30,7 @@ public abstract class Account implements accountOperations, Runnable {
 		this.isAccountActive = true;
 		Account.comment = "-";
 		isTransfer = false;
-//		timeThread();
+		timeThread();
 	}
 
     /////\/\///////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////

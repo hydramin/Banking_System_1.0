@@ -192,6 +192,4 @@ public class Credit extends Account {
 		String CLEstatusDisplay = (CLEpenaltyStatus) ? "High Credit Limit & CLE penalty" : "Low Credit Limit & No CLE penalty";
 		return super.toString() + "CLE Penalty: "+CLEstatusDisplay +"\n";
 	}
-
-
 }

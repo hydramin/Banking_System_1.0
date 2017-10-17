@@ -4,6 +4,7 @@ package system;
 //import java.util.Calendar;
 //import java.util.Date;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 
 public final class Main {
@@ -16,7 +17,7 @@ public final class Main {
 	
 	
 	//////////////////////////////////////////////////////////////////////////// methods
-	private static void firstPage()  throws FileNotFoundException{
+	private static void firstPage() throws IOException {
 		
 		while (true) {
 			System.out.println("Home Screen");
@@ -376,7 +377,7 @@ private static void addOrCancle(Customer customer, Credit credit) {
 	}
 	////////////////////////////////////////////////////////////////////////////
 	
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
         Customer afia = Customer.addCustomer(333333);
 
         Chequeing chequeing3 = Chequeing.createAccount(113);
