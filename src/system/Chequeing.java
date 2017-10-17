@@ -1,5 +1,6 @@
 package system;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -45,7 +46,7 @@ public class Chequeing extends Account/* implements Runnable*/ {
     //\/////\/\/////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
 
 	/**
-	* <dt><b>Description:</b><dd> This method returns the HasMap containing the chequeing accounts.
+	* @Description This method returns the HasMap containing the chequeing accounts.
 	*
 	* @return Object of type HasMap mapping account numbers with chequeing accounts.
 	*/
@@ -54,13 +55,11 @@ public class Chequeing extends Account/* implements Runnable*/ {
 	}
 
     /**
-     * <dt><b>Description:</b><dd>
+     * @Description
      *
      * @return
      */
-	public ScheduledExecutorService getPay() {
-		return pay;
-	}
+	
 
     ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
@@ -68,12 +67,12 @@ public class Chequeing extends Account/* implements Runnable*/ {
     ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
 
     /**
-     * <dt><b>Description:</b><dd> This method sets the limit of the account.
+     * @Description This method sets the limit of the account.
      *
      * @param limit value of type int representing the spending limit.
      *
-     * <dt><b>Precondition:</b><dd> The argument limit must be an integer value.
-     * <dt><b>Postcondition:</b><dd> The limit of the account of the customer will be set.
+     * @Precondition: The argument limit must be an integer value.
+     * @Postcondition: The limit of the account of the customer will be set.
      */
     @Override
     public void setLimit(int limit) {
@@ -88,10 +87,10 @@ public class Chequeing extends Account/* implements Runnable*/ {
     ////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
 
     /**
-     * <dt><b>Description:</b><dd> This method calculates the indebtedness of the account.
+     * @Description This method calculates the indebtedness of the account.
      *
-     * <dt><b>Precondition:</b><dd>
-     * <dt><b>Postcondition:</b><dd> If the balance is negative, that negative balance is returned as debt.
+     * @Precondition:
+     * @Postcondition: If the balance is negative, that negative balance is returned as debt.
      *                          Other wise the debt returned is zero.
      *
      * @return double representing indebtedness.
@@ -103,7 +102,9 @@ public class Chequeing extends Account/* implements Runnable*/ {
 	}
 
     /**
-     *
+     *@Description: it cancles the created account before it is added to the customer
+     *@Precondition: created account must not be added before it is canceled 
+     *@Postcondition: it removes the account from the unique set of accounts in the account list
      */
 	public void cancleAccount(){
 		Chequeing.getAccountList().remove(super.getAccountNumber());
@@ -111,14 +112,14 @@ public class Chequeing extends Account/* implements Runnable*/ {
 	}
 
     /**
-     * <dt><b>Description:</b><dd> This method is the only way to create a new chequeing account. A new account number is passed
+     * @Description This method is the only way to create a new chequeing account. A new account number is passed
      *              as a parameter and if the account is not in the system, it will be added as a new one.
      *              The new account is then passed in to the list of accounts map(accountList).
      *
      * @param accountNumber value of type int representing the account number.
      *
-     * <dt><b>Precondition:</b><dd> The argument accountNumber must an integer value.
-     * <dt><b>Postcondition:</b><dd> A chequeing account will be returned; newly created or pre-existing from the list.
+     * @Precondition: The argument accountNumber must an integer value.
+     * @Postcondition: A chequeing account will be returned; newly created or pre-existing from the list.
      *
      * @return account of type Chequeing.
      */
@@ -129,12 +130,12 @@ public class Chequeing extends Account/* implements Runnable*/ {
 	}
 	
 	/**
-     * <dt><b>Description:</b><dd> This method is a means of setting the over draft option of the account.
+     * @Description This method is a means of setting the over draft option of the account.
      *
      * @param option value of type int representing the over draft option.
      *
-     * <dt><b>Precondition:</b><dd> The argument option must be an integer value.
-     * <dt><b>Postcondition:</b><dd> If the option is an integer between and including 1 and 3, the overdraft
+     * @Precondition: The argument option must be an integer value.
+     * @Postcondition: If the option is an integer between and including 1 and 3, the overdraft
      *               option will be set accordingly.
      */
 	public void setOverdraftOption(int option){
@@ -151,7 +152,7 @@ public class Chequeing extends Account/* implements Runnable*/ {
 	}
 	
     /**
-     * <dt><b>Description:</b><dd> This method will withdraw a specified amount and depending
+     * @Description This method will withdraw a specified amount and depending
      *              on whether or not the balance goes negative, fees will be
      *              charged based on overdraft options. If overdraft option 1 is selected, then
      *              a negative balance resulting withdrawal would be declined and NSF penalty charged.
@@ -159,8 +160,8 @@ public class Chequeing extends Account/* implements Runnable*/ {
      *
      * @param amount value of type double to be withdrawn.
      *
-     * <dt><b>Precondition:</b><dd> The argument amount must be a positive real number of type double.
-     * <dt><b>Postcondition:</b><dd> The amount will be withdrawn depending on whether or not
+     * @Precondition: The argument amount must be a positive real number of type double.
+     * @Postcondition: The amount will be withdrawn depending on whether or not
      *               the resulting balance goes negative.
      */
 	@Override
@@ -218,6 +219,12 @@ public class Chequeing extends Account/* implements Runnable*/ {
 		if(super.time() % 20 == 0){
 			deductDailyOverdraft();			
 			super.record("-", super.getNoTransaction(), END_DAY);
+			try {
+				AccountActivity.processAccountLogEndOfDay();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	@Override
@@ -225,6 +232,12 @@ public class Chequeing extends Account/* implements Runnable*/ {
 		if (super.time() % 60 == 0){
 			deductMonthlyOverdraft();
 			super.record("-", super.getNoTransaction(), END_MONTH);
+			try {
+				AccountActivity.processAccountEndOfMonth();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

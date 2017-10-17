@@ -223,7 +223,13 @@ public final class Main {
 	}
 		
 	private static void exitSystem(){
-		//print the logs to file. Call save account log
+		try {
+			AccountActivity.saveAccountLog();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		exitSystem();
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////// Pages or UI for software.
@@ -260,7 +266,7 @@ public final class Main {
 				break;
 			case 4:
 				System.out.println("Exiting System!");				
-				System.exit(0);
+				exitSystem();
 				break;				
 
 			default:
@@ -290,7 +296,7 @@ public final class Main {
 				Main.back = true;
 				break;
 			case 3:
-				System.exit(0);
+				exitSystem();
 				break;
 
 			default:
@@ -344,7 +350,7 @@ public final class Main {
 					break;
 				case 6:
 					System.out.println("Exiting System!");
-					System.exit(0);
+					exitSystem();
 					break;
 
 				default:
@@ -426,7 +432,7 @@ public final class Main {
 				break;
 			case 4:
 				System.out.println("Exiting System!");
-				System.exit(0);
+				exitSystem();
 				break;
 
 			default:
@@ -464,7 +470,7 @@ public final class Main {
 				break;
 			case 6:
 				System.out.println("Exiting system.");
-				System.exit(0);
+				exitSystem();
 				break;
 
 			default:

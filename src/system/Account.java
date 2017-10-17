@@ -10,7 +10,8 @@ import java.util.concurrent.TimeUnit;
  * @author: Sorab O
  * @invariant: 100 >= accountNumber >= 999
  * @invariant: 100000 >=SIN >= 999999
- * @invariant: limit > 0 		
+ * @invariant: limit > 0
+ * @invariant: balance is a floating point number  		
  *
  */
 public abstract class Account implements accountOperations, Runnable {
@@ -22,17 +23,23 @@ public abstract class Account implements accountOperations, Runnable {
      boolean transferStatus;
 	 static final String WITHDRAW = "Withdrawal";
 	 static final String TRANSFER = "Transfer";
-	 static boolean isTransfer;
+	 static boolean isTransfer; // becomes true when the transfer function is used, it prevents duplicate withdrawal records
 	 static final String DEPOSITE = "Deposite";
 	 static final String SUSPEND = "Suspend";
 	 static final double NO_TRANSACTION = 0.0;
 	 static final String END_MONTH = "End of Month report";
 	 static final String END_DAY = "End of day report";
 	 static String comment;
-     ScheduledExecutorService pay;
+     ScheduledExecutorService pay;		// the scheduled executor runs the thread every second to allow the accounts to monitor time
 
     ////////////////////////////// CONSTRUCTOR
-
+     /**
+      * @Description Super constructor for chequeing credit and loan account types
+      *
+ 	  * @Precondition: Account number or int type that is between 100 and 999
+      *
+      * <dt><b>Postcondition:</b><dd> Creates an account instance.
+      */
      Account(int accountNumber){
 		this.accountNumber = accountNumber;
 		this.transferStatus = true;
@@ -42,7 +49,7 @@ public abstract class Account implements accountOperations, Runnable {
 		timeThread();
 	}
 
-    /////\/\///////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
+    /////\/\////////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
     ////\/\/\///////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
     ///\/==\/\//////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
     //\/////\/\/////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
@@ -52,7 +59,7 @@ public abstract class Account implements accountOperations, Runnable {
 	}
     
 	/**
-     * <dt><b>Description:</b><dd> This method returns the total balance of the account.
+     * @Description This method returns the total balance of the account.
      *
 	 * @return : returns a double representing the value of the current balance.
 	 */
@@ -62,7 +69,7 @@ public abstract class Account implements accountOperations, Runnable {
 	}
 
     /**
-     * <dt><b>Description:</b><dd> This method returns the limit of the account.
+     * @Description This method returns the limit of the account.
      *
      * @return : returns an int representing the limit of the account.
      */
@@ -71,7 +78,7 @@ public abstract class Account implements accountOperations, Runnable {
 	}
 
     /**
-     * <dt><b>Description:</b><dd> This method returns a transfer status of the account.
+     * @Description This method returns a transfer status of the account.
      *
      * @return : returns a boolean representing the transfer status of the account.
      */
@@ -80,30 +87,56 @@ public abstract class Account implements accountOperations, Runnable {
 	}
 
     /**
-     * <dt><b>Description:</b><dd> This method returns the number (ID) of the account.
+     * @Description This method returns the number (ID) of the account.
      *
      * @return : returns an int representing the account number.
      */
 	public int getAccountNumber(){
 		return accountNumber;
 	}
+	
+	/**
+     * @Description An executor service that runns the thread of an account
+     *
+     * @return : returns the thread of the current account
+     */
+	public ScheduledExecutorService getPay() {
+		return pay;
+	}
 
     ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
 
+	
+	/**
+     * @Description This method sets the comments for the AccountActivity class before it logs an activity
+     *
+     *  @Precondition: argument must be any string
+     *
+     * <dt><b>Postcondition:</b><dd> Sets Account.comment to the parameter's value
+     */
 	public static void setComment(String comment) {
 		Account.comment = comment;
 	}
 	
+	/**
+     * @Description This method sets the Account.isTransfer field to the value of the parameter
+     *
+	 * @Precondition: parameter must be boolean type
+     *
+     * <dt><b>Postcondition:</b><dd> It sets Account.isTransfer to the parameter's value
+     * 
+     * <dt><b>@param:</b><dd> It sets Account.isTransfer to the parameter's value
+     */
 	public static void setTransfer(boolean isTransfer) {
 		Account.isTransfer = isTransfer;
 	}
     /**
-     * <dt><b>Description:</b><dd> This method sets the transfer status of the account.
+     * @Description This method sets the transfer status of the account.
      *
-	 * <dt><b>Precondition:</b><dd> The argument transfer status must be either true or false.
+	 * @Precondition: The argument transfer status must be either true or false.
      *
      * <dt><b>Postcondition:</b><dd> The transfer status of the account of the customer will be set.
      */
@@ -112,9 +145,9 @@ public abstract class Account implements accountOperations, Runnable {
 	}
 
     /**
-     * <dt><b>Description:</b><dd> This method sets the limit of the account.
+     * @Description This method sets the limit of the account.
      *
-     * <dt><b>Precondition:</b><dd> The argument limit must be an integer value.
+     * @Precondition: The argument limit must be an integer value.
      * <dt><b>Postcondition:</b><dd> The limit of the account of the customer will be set.
      */
 	public void setLimit(int limit) {
@@ -133,11 +166,11 @@ public abstract class Account implements accountOperations, Runnable {
     ////////////////////////////////////////////////////  OPERATIONS  ////////////////////////////////////////////////////
 
 	/**
-	 * <dt><b>Description:</b><dd> Takes in a certain amount and depending on the overdraft option reduces the balance.
+	 * @Description Takes in a certain amount and depending on the overdraft option reduces the balance.
      *
 	 * @param amount value of type double to be withdrawn.
      *
-     * <dt><b>Precondition:</b><dd> The argument amount be a non-negative real number of type double.
+     * @Precondition: The argument amount be a non-negative real number of type double.
      * <dt><b>Postcondition:</b><dd> The specified amount will be withdrawn if account is active.
 	 */
 	@Override
@@ -155,11 +188,11 @@ public abstract class Account implements accountOperations, Runnable {
 	}
 
 	/**
-	 * <dt><b>Description:</b><dd> Takes in a certain amount and increases the balance by the amount.
+	 * @Description Takes in a certain amount and increases the balance by the amount.
      *
 	 * @param amount value of type double to be deposited.
      *
-     * <dt><b>Precondition:</b><dd> The argument amount must be a real number of type float.
+     * @Precondition: The argument amount must be a real number of type float.
      * <dt><b>Postcondition:</b><dd> The specified amount will be deposited if the account is active.
 	 */
 	@Override
@@ -175,11 +208,11 @@ public abstract class Account implements accountOperations, Runnable {
 	}
 
 	/**
-	 * <dt><b>Description:</b><dd> Changes the users' permission so that the user can only see the balance
+	 * @Description Changes the users' permission so that the user can only see the balance
      *              and account activity; all other activities (withdrawing, depositing) are prohibited.
      *
-     * <dt><b>Precondition:</b><dd>
-     * <dt><b>Precondition</b><dd> The account will be suspended.
+     * @Precondition:
+     * @Precondition: The account will be suspended.
 	 */
 	@Override
 	public void suspendAccount() {
@@ -188,10 +221,10 @@ public abstract class Account implements accountOperations, Runnable {
 	}
 
     /**
-     * <dt><b>Description:</b><dd> Changes the users' permissions so that the user can perform all transactions.
+     * @Description Changes the users' permissions so that the user can perform all transactions.
      *
-     * <dt><b>Precondition</b><dd>
-     * <dt><b>Precondition</b><dd>  The account will be reactivated.
+     * @Precondition:
+     * @Precondition:  The account will be reactivated.
      */
 	@Override
 	public void reactivateAccount() {
@@ -200,13 +233,13 @@ public abstract class Account implements accountOperations, Runnable {
 	}
 
     /**
-     * <dt><b>Description:</b><dd> Transfers a specified amount from specified account to another account.
+     * @Description Transfers a specified amount from specified account to another account.
      *
      * @param amount double representing specified amount.
      * @param accountFrom specified account to transfer from, of type Account.
      * @param accountTo  account to transfer to, of type Account.
      *
-     * <dt><b>Precondition:</b><dd> The arguments must be a real number of type double, an account of type
+     * @Precondition: The arguments must be a real number of type double, an account of type
      *                   Account and not null and another Account also not null.
      * <dt><b>Postcondition:</b><dd> The specified amount will be transferred from the specified account to the other
      *                   if the transfer status is true.
@@ -226,7 +259,7 @@ public abstract class Account implements accountOperations, Runnable {
 	}
 
     /**
-     * <dt><b>Description:</b><dd> The method is to make a record of each transaction of the user.
+     * @Description The method is to make a record of each transaction of the user.
      *                          Any method that is invoked in this class will record information about
      *                          through the below method. Transaction type, transaction amount, date
      *                          and resulting balance are key records.
@@ -236,8 +269,8 @@ public abstract class Account implements accountOperations, Runnable {
      *               withdrawals, transfers, and limit.
      * @param comment This is a value of type string representing the balance after the transaction has occurred.
      *
-     * <dt><b>Precondition</b><dd> tranType must be a string value and not empty. amount and balance must be real numbers.
-     * <dt><b>Precondition</b><dd> a record of type AccountActivity is created with all the above information.
+     * @Precondition: tranType must be a string value and not empty. amount and balance must be real numbers.
+     * @Postcondition: a record of type AccountActivity is created with all the above information.
      */
 
 	public void record(String tranType, double tranAmount, String comment){
@@ -260,6 +293,11 @@ public abstract class Account implements accountOperations, Runnable {
 		log60Seconds(); // for monthly deductions and logging
 	}
 
+	/**
+	 * @Description: starts the thread for this class instance
+	 * @Precondition: no thread has been started before in this class
+	 * @Postcondition: a new thread will be started
+	 */
 	 void timeThread() {
 		System.out.println("Class thread called.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + this.getAccountNumber());
 		this.pay = Executors.newSingleThreadScheduledExecutor();
@@ -272,6 +310,10 @@ public abstract class Account implements accountOperations, Runnable {
 
 	 abstract void log60Seconds();
 
+	 /**
+	  * 
+	  * @return the current value of the seconds from the epoch
+	  */
 	static  long time() {
 		long timeMillis = System.currentTimeMillis();
 		long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(timeMillis);
@@ -286,7 +328,7 @@ public abstract class Account implements accountOperations, Runnable {
 
     /**
      *
-     * @return
+     * @return the account number and the balance of the account
      */
 	@Override
 	public String toString() {
