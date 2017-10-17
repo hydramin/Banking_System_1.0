@@ -1,5 +1,6 @@
 package system;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -29,10 +30,10 @@ public class AccountActivity{
     ////////////////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////  GETTERS  ////////////////////////////////////////////////////
 
-    /**
-    public static LogMap<Integer, AccountActivity> getAccountLog() {
+
+    public static ArrayList<AccountActivity> getAccountLog() {
 		return accountLog;
-	}*/
+	}
     
     public static ArrayList<AccountActivity> getAccountLog() {
 		return accountLog;
@@ -41,6 +42,8 @@ public class AccountActivity{
     public String getComment() {
 		return comment;
 	}
+
+
 
     ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
     ////////////////////////////////////////////////////  SETTERS  ////////////////////////////////////////////////////
@@ -61,18 +64,8 @@ public class AccountActivity{
     }
 
     public void addToList(){
-        //accountLog.put(SIN, this);
         accountLog.add(this);
     }
-
-    
-    @Override
-    public String toString() {    	
-    	return String.format("\nSIN: %d\nAccount#: %d\nDate: %s\nType: %s\nTrans. Amt: $%.2f\nBalance: $%.2f\nComment: %s\n", 
-    						this.SIN, this.accountNumber, this.transactionDate, this.transactionType, this.transactionAmount,this.balance, this.comment);
-    }
-    
-
 
     public static void sortAccountLog() {
         AccountActivity temp;
@@ -94,19 +87,48 @@ public class AccountActivity{
         }
     }
 
-    public static void processAccountLogEndOfDay() {
-
+    public static void processAccountLogEndOfDay() throws FileNotFoundException {
+        sortAccountLog();
+        saveAccountLog();
     }
 
-    public static void processAccountEndOfMonth() {
-
+    public static void processAccountEndOfMonth() throws FileNotFoundException {
+        sortAccountLog();
+        saveAccountLog();
     }
 
-    public static void saveAccountLog() {
-
+    public static void saveAccountLog() throws FileNotFoundException {
+        try {
+            FileOutputStream fileOut = new FileOutputStream("./accountLog.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(accountLog);
+            out.close();
+            fileOut.close();
+            System.out.println("Serialized data is stored in ./accountLog.ser");
+        }
+        catch (IOException i){
+            i.printStackTrace();
+        }
     }
 
     public static void retrieveAccountLog() {
+        try {
+            FileInputStream fileIn = new FileInputStream("./accountLog.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            accountLog = (ArrayList<AccountActivity>) in.readObject();
+            in.close();
+            fileIn.close();
+        }catch(IOException i) {
+            i.printStackTrace();
+        }catch(ClassNotFoundException c) {
+            System.out.println("account logs not found");
+            c.printStackTrace();
+        }
+    }
 
+    @Override
+    public String toString() {
+        return String.format("\nSIN: %d\nAccount#: %d\nDate: %s\nType: %s\nTrans. Amt: $%.2f\nBalance: $%.2f\nComment: %s\n",
+                this.SIN, this.accountNumber, this.transactionDate, this.transactionType, this.transactionAmount,this.balance, this.comment);
     }
 }

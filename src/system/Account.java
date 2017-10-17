@@ -5,28 +5,29 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public abstract class Account implements accountOperations, Runnable {
-	private double balance; // the current amount in the account
-    private int accountNumber; // identification for an account
-    private int SIN;
-    private boolean isAccountActive = true; // account active = true, account suspended = false
-    private int limit;
-    private boolean transferStatus;
-	private static final String WITHDRAW = "Withdrawal";
-	private static final String TRANSFER = "Transfer";
-	private static boolean isTransfer;
-	private static final String DEPOSITE = "Deposite";
-	private static final String SUSPEND = "Suspend";
-	private static final double NO_TRANSACTION = 0.0;
-	protected static final String END_MONTH = "End of Month report";
-	protected static final String END_DAY = "End of day report";
-	private static String comment;
-    private ScheduledExecutorService pay;
+	 double balance; // the current amount in the account
+     int accountNumber; // identification for an account
+     int SIN;
+     boolean isAccountActive; // account active = true, account suspended = false
+     int limit;
+     boolean transferStatus;
+	 static final String WITHDRAW = "Withdrawal";
+	 static final String TRANSFER = "Transfer";
+	 static boolean isTransfer;
+	 static final String DEPOSITE = "Deposite";
+	 static final String SUSPEND = "Suspend";
+	 static final double NO_TRANSACTION = 0.0;
+	 static final String END_MONTH = "End of Month report";
+	 static final String END_DAY = "End of day report";
+	 static String comment;
+     ScheduledExecutorService pay;
 
     ////////////////////////////// CONSTRUCTOR
 
-    protected Account(int accountNumber){
+     Account(int accountNumber){
 		this.accountNumber = accountNumber;
 		this.transferStatus = true;
+		this.isAccountActive = true;
 		Account.comment = "-";
 		isTransfer = false;
 //		timeThread();
@@ -127,7 +128,7 @@ public abstract class Account implements accountOperations, Runnable {
      *
 	 * @param amount value of type double to be withdrawn.
      *
-     * <dt><b>Precondition:</b><dd> The argument amount be a real number of type double.
+     * <dt><b>Precondition:</b><dd> The argument amount be a non-negative real number of type double.
      * <dt><b>Postcondition:</b><dd> The specified amount will be withdrawn if account is active.
 	 */
 	@Override
@@ -250,7 +251,7 @@ public abstract class Account implements accountOperations, Runnable {
 		log60Seconds(); // for monthly deductions and logging
 	}
 
-	private void timeThread() {
+	 void timeThread() {
 		System.out.println("Class thread called.>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + this.getAccountNumber());
 		this.pay = Executors.newSingleThreadScheduledExecutor();
 		this.pay.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS); // checks
@@ -258,11 +259,11 @@ public abstract class Account implements accountOperations, Runnable {
 																	// seconds
 	}
 
-	protected abstract void log20Seconds();
+	 abstract void log20Seconds();
 
-	protected abstract void log60Seconds();
+	 abstract void log60Seconds();
 
-	static protected long time() {
+	static  long time() {
 		long timeMillis = System.currentTimeMillis();
 		long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(timeMillis);
 		return timeSeconds;
