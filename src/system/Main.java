@@ -3,6 +3,7 @@ package system;
 //import java.text.SimpleDateFormat;
 //import java.util.Calendar;
 //import java.util.Date;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public final class Main {
@@ -15,7 +16,7 @@ public final class Main {
 	
 	
 	//////////////////////////////////////////////////////////////////////////// methods
-	private static void firstPage() {
+	private static void firstPage()  throws FileNotFoundException{
 		
 		while (true) {
 			System.out.println("Home Screen");
@@ -52,6 +53,15 @@ public final class Main {
 				System.out.println("Exiting System!");				
 				System.exit(0);
 				break;
+				case 5:
+				    System.out.println("Exiting System!");
+                    AccountActivity.processAccountLogEndOfDay();
+
+                    for (AccountActivity a : AccountActivity.getAccountLog()){
+                        System.out.println(a);
+                    }
+
+                    break;
 
 			default:
 				System.out.println("Invalid input, please choose from the options.");
@@ -366,41 +376,54 @@ private static void addOrCancle(Customer customer, Credit credit) {
 	}
 	////////////////////////////////////////////////////////////////////////////
 	
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
+        Customer afia = Customer.addCustomer(333333);
+
+        Chequeing chequeing3 = Chequeing.createAccount(113);
+        chequeing3.setSIN(afia.getSIN());
+        chequeing3.depositAmount(200000);
+
+        Credit credit3 = Credit.createAccount(223);
+        credit3.setSIN(afia.getSIN());
+        credit3.setLimit(15000);
+        afia.addAccount(chequeing3);
+        afia.addAccount(credit3);
+
     	Customer amin = Customer.addCustomer(111111);
-    		Chequeing chequeing1 = Chequeing.createAccount(111);
-    		chequeing1.setSIN(amin.getSIN());
-	    		chequeing1.depositAmount(10000);
-	    		chequeing1.setOverdraftOption(2);
-	    		chequeing1.setLimit(900);
+
+        Chequeing chequeing1 = Chequeing.createAccount(111);
+        chequeing1.setSIN(amin.getSIN());
+        chequeing1.depositAmount(10000);
+        chequeing1.setOverdraftOption(2);
+        chequeing1.setLimit(900);
 	    		
-	    	Credit credit1 = Credit.createAccount(227);
-	    		credit1.setSIN(amin.getSIN());
-	    		credit1.setLimit(1000);
-	    		
-    		amin.addAccount(chequeing1);
-    		amin.addAccount(credit1);    	    		
+        Credit credit1 = Credit.createAccount(227);
+        credit1.setSIN(amin.getSIN());
+        credit1.setLimit(1000);
+        amin.addAccount(chequeing1);
+        amin.addAccount(credit1);
     		
     	Customer sorab = Customer.addCustomer(222222);
-    		Chequeing chequeing2 = Chequeing.createAccount(112);
-			chequeing2.setSIN(sorab.getSIN());
-    			chequeing2.depositAmount(1000);
-    			chequeing2.setOverdraftOption(2);
-    		Credit credit2 = Credit.createAccount(222);
-			credit2.setSIN(sorab.getSIN());
-    			credit2.setLimit(1500);
-			sorab.addAccount(chequeing2);
-			sorab.addAccount(credit2);
-    			
-    	Customer afia = Customer.addCustomer(333333);
-    		Chequeing chequeing3 = Chequeing.createAccount(113);
-    		chequeing3.setSIN(afia.getSIN());
-    			chequeing3.depositAmount(200000);
-    		Credit credit3 = Credit.createAccount(223);
-    		credit3.setSIN(afia.getSIN());
-    			credit3.setLimit(15000);
-			afia.addAccount(chequeing3);
-			afia.addAccount(credit3);
+
+        Chequeing chequeing2 = Chequeing.createAccount(112);
+        chequeing2.setSIN(sorab.getSIN());
+        chequeing2.depositAmount(1000);
+        chequeing2.setOverdraftOption(2);
+
+        Credit credit2 = Credit.createAccount(222);
+        credit2.setSIN(sorab.getSIN());
+        credit2.setLimit(1500);
+        sorab.addAccount(chequeing2);
+        sorab.addAccount(credit2);
+
+        for (AccountActivity a : AccountActivity.getAccountLog()){
+            System.out.println(a);
+        }
+
+        AccountActivity.processAccountLogEndOfDay();
+        for (AccountActivity a : AccountActivity.getAccountLog()){
+            System.out.println(a);
+        }
 		
 			System.out.println("");
     	firstPage();

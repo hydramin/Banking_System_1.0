@@ -60,16 +60,17 @@ public class ChequeingTest {
         Chequeing chequeing = Chequeing.createAccount(123);
         chequeing.setLimit(1000);
         chequeing.depositAmount(1000.0);
+        chequeing.setOverdraftOption(2);
         chequeing.withdrawAmount(1500.0);
         chequeing.deductDailyOverdraft();
         double actual = chequeing.getBalance();
-        System.out.println(chequeing.withdrawLimit);
+        System.out.println(actual);
 
 
-        double expected = -505.0;
+        double expected = -510.0;
         System.out.println(chequeing.getBalance());
 
-        assertEquals(expected, actual);
+        assertEquals(expected, actual, delta);
     }
 
 }
